@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyên đề 1 - Bài 3: Năng lượng hoạt hóa (Tổ 3 - 10A06)</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        quantum: {
+                            bg: '#060913',
+                            card: '#0c1222',
+                            border: 'rgba(0, 245, 212, 0.15)',
+                            primary: '#00F5D4',
+                            accent: '#FF2A85',
+                            warm: '#FF7B00',
+                            purple: '#9d4edd'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- GSAP 3 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <!-- KaTeX for math & chemical equations -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Styles & Glassmorphism -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: #060913;
+            color: #f8fafc;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .glass-panel {
+            background: rgba(12, 18, 34, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 245, 212, 0.3);
+            box-shadow: 0 0 25px rgba(0, 245, 212, 0.1);
+        }
+
+        .neon-glow-cyan {
+            box-shadow: 0 0 20px rgba(0, 245, 212, 0.3);
+        }
+
+        .neon-glow-pink {
+            box-shadow: 0 0 20px rgba(255, 42, 133, 0.3);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #00F5D4 0%, #7b2cbf 50%, #FF2A85 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2.5rem 4rem 5rem 4rem;
+            overflow-y: auto;
+        }
+
+        .slide-container.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Custom Scrollbar for slides if content is long */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(6, 9, 19, 0.5);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 245, 212, 0.2);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 245, 212, 0.4);
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- HTML5 Background Canvas -->
+    <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Main Presentation Wrapper -->
+    <main id="presentation-deck" class="relative z-10 w-screen h-screen overflow-hidden flex flex-col justify-between">
+
+        <!-- ================= SLIDE 1: TRANG BÌA ================= -->
+        <section class="slide-container active" data-slide="1">
+            <div></div>
+            <div class="max-w-5xl mx-auto text-center space-y-8 my-auto">
+                <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full glass-panel border border-[#00F5D4]/30 text-[#00F5D4] text-sm font-semibold tracking-wider uppercase animate-pulse">
+                    <i data-lucide="atom" class="w-4 h-4"></i> CHUYÊN ĐỀ 1 - BÀI 3 &bull; TỔ 3 - 10A06
+                </div>
+                <h1 class="text-6xl md:text-8xl font-extrabold tracking-tight text-white leading-none">
+                    NĂNG LƯỢNG <span class="text-gradient">HOẠT HÓA</span>
+                </h1>
+                <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-light">
+                    Khám phá rào cản năng lượng, cơ chế va chạm hiệu quả và phương trình Arrhenius trong hệ sinh thái phản ứng hóa học.
+                </p>
+                <div class="pt-6">
+                    <button onclick="goToSlide(2); playSound('click');" class="group relative inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#00F5D4] to-[#7b2cbf] text-slate-950 font-bold rounded-2xl shadow-lg hover:shadow-[#00F5D4]/50 transition-all duration-300 transform hover:-translate-y-1">
+                        <span class="text-slate-950 font-extrabold">Khởi động Bài giảng</span>
+                        <i data-lucide="play-circle" class="w-6 h-6 text-slate-950 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="text-center text-slate-500 text-xs font-mono">
+                Tổ 3 - Lớp 10A06 &bull; Trường THPT &bull; 2026
+            </div>
+        </section>
+
+        <!-- ================= SLIDE 2: BENTO GRID AGENDA ================= -->
+        <section class="slide-container" data-slide="2">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Lộ trình khám phá</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Nội dung bài học & Mô phỏng tương tác</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+                <div onclick="goToSlide(3); playSound('click');" class="glass-card p-8 rounded-3xl cursor-pointer group flex flex-col justify-between h-72">
+                    <div class="w-12 h-12 rounded-2xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 flex items-center justify-center text-[#00F5D4] group-hover:scale-110 transition-transform">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-xs font-mono text-[#00F5D4]">PHẦN 01</span>
+                        <h3 class="text-xl font-bold text-white group-hover:text-[#00F5D4] transition-colors">Năng lượng hoạt hóa</h3>
+                        <p class="text-slate-400 text-sm">Khái niệm, ý nghĩa từ nguyên, cơ chế va chạm hiệu quả và phương trình Arrhenius.</p>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-[#00F5D4] font-semibold">
+                        <span>Khám phá ngay</span> <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <div onclick="goToSlide(10); playSound('click');" class="glass-card p-8 rounded-3xl cursor-pointer group flex flex-col justify-between h-72">
+                    <div class="w-12 h-12 rounded-2xl bg-[#FF2A85]/10 border border-[#FF2A85]/30 flex items-center justify-center text-[#FF2A85] group-hover:scale-110 transition-transform">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-xs font-mono text-[#FF2A85]">PHẦN 02</span>
+                        <h3 class="text-xl font-bold text-white group-hover:text-[#FF2A85] transition-colors">Chất xúc tác</h3>
+                        <p class="text-slate-400 text-sm">Đặc điểm cốt lõi, giản đồ năng lượng SVG động và ứng dụng thực tiễn trong công nghiệp.</p>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-[#FF2A85] font-semibold">
+                        <span>Khám phá ngay</span> <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <div onclick="goToSlide(14); playSound('click');" class="glass-card p-8 rounded-3xl cursor-pointer group flex flex-col justify-between h-72">
+                    <div class="w-12 h-12 rounded-2xl bg-[#FF7B00]/10 border border-[#FF7B00]/30 flex items-center justify-center text-[#FF7B00] group-hover:scale-110 transition-transform">
+                        <i data-lucide="award" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <span class="text-xs font-mono text-[#FF7B00]">PHẦN 03</span>
+                        <h3 class="text-xl font-bold text-white group-hover:text-[#FF7B00] transition-colors">Luyện tập & Trắc nghiệm</h3>
+                        <p class="text-slate-400 text-sm">Hệ thống câu hỏi tương tác củng cố kiến thức và bài tập tính toán thực chiến.</p>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-[#FF7B00] font-semibold">
+                        <span>Tham gia thử thách</span> <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 3: KHÁI NIỆM & TỪ NGUYÊN ================= -->
+        <section class="slide-container" data-slide="3">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Phần 01 &bull; Khái niệm cơ bản</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Năng lượng hoạt hóa là gì? & Giải nghĩa từ nguyên</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-auto">
+                <div class="glass-card p-8 rounded-3xl space-y-6 flex flex-col justify-center">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 flex items-center justify-center text-[#00F5D4] shrink-0">
+                            <i data-lucide="flame" class="w-7 h-7"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Định nghĩa cốt lõi</h3>
+                            <p class="text-sm text-[#00F5D4] font-mono">Activation Energy ($E_a$)</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 text-lg leading-relaxed">
+                        Năng lượng hoạt hóa ($E_a$) là mức năng lượng tối thiểu mà các chất tham gia phản ứng cần phải đạt được để xảy ra <strong class="text-white font-semibold">va chạm hiệu quả</strong> và chuyển đổi thành sản phẩm.
+                    </p>
+                    <div class="p-4 rounded-2xl bg-[#00F5D4]/5 border border-[#00F5D4]/20 text-sm text-[#00F5D4]">
+                        💡 Đơn vị thường dùng: $\text{kJ/mol}$ hoặc $\text{J/mol}$. Giá trị $E_a$ càng nhỏ, phản ứng diễn ra càng dễ dàng và nhanh chóng ở nhiệt độ thấp.
+                    </div>
+                </div>
+
+                <div class="space-y-6 flex flex-col justify-center">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-card p-6 rounded-2xl space-y-2 border-l-4 border-l-[#00F5D4]">
+                            <span class="text-xs font-mono text-[#00F5D4]">TỪ NGUYÊN 1</span>
+                            <h4 class="text-xl font-bold text-white">HOẠT</h4>
+                            <p class="text-slate-400 text-sm">Biến đổi, chuyển hóa, làm cho thay đổi từ trạng thái tĩnh tại sang trạng thái hoạt động.</p>
+                        </div>
+                        <div class="glass-card p-6 rounded-2xl space-y-2 border-l-4 border-l-[#FF2A85]">
+                            <span class="text-xs font-mono text-[#FF2A85]">TỪ NGUYÊN 2</span>
+                            <h4 class="text-xl font-bold text-white">HÓA</h4>
+                            <p class="text-slate-400 text-sm">Quá trình biến đổi các chất ban đầu thành các chất mới với tính chất hoàn toàn khác biệt.</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-6 rounded-3xl space-y-3 bg-gradient-to-br from-[#0c1222] to-[#121c33]">
+                        <div class="flex items-center gap-3 text-[#00F5D4]">
+                            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            <h4 class="font-bold text-white">Tổng kết ý nghĩa</h4>
+                        </div>
+                        <p class="text-slate-300 text-sm italic">
+                            &ldquo;<strong class="text-white font-semibold">Hoạt hóa</strong>&rdquo; chính là quá trình cung cấp hoặc đưa các phân tử từ trạng thái bình thường vượt qua hàng rào năng lượng để lên trạng thái hoạt động có khả năng phản ứng.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 4: VÍ DỤ MINH HỌA THỰC TẾ ================= -->
+        <section class="slide-container" data-slide="4">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Phần 01 &bull; Trải nghiệm thực tế</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Ví dụ minh họa năng lượng hoạt hóa trong đời sống</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto">
+                <div class="glass-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="w-12 h-12 rounded-2xl bg-[#FF7B00]/10 border border-[#FF7B00]/30 flex items-center justify-center text-[#FF7B00] group-hover:scale-110 transition-transform">
+                        <i data-lucide="flame" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-bold text-white">01. Đốt cháy củi gỗ</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Củi để ngoài không khí không tự bốc cháy dù có oxygen. Cần dùng diêm hoặc bật lửa cung cấp năng lượng ban đầu (vượt $E_a$). Khi đã cháy, nhiệt lượng tỏa ra tự duy trì phản ứng.
+                        </p>
+                    </div>
+                    <div class="text-xs font-mono text-[#FF7B00]">Nhiệt độ kích hoạt cao</div>
+                </div>
+
+                <div class="glass-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="w-12 h-12 rounded-2xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 flex items-center justify-center text-[#00F5D4] group-hover:scale-110 transition-transform">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-bold text-white">02. Bật bếp gas</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Hỗn hợp khí methane và oxygen thoát ra nhưng không phản ứng ngay. Tia lửa điện từ hệ thống đánh lửa cung cấp năng lượng kích hoạt chớp nhoáng để khởi động quá trình cháy tỏa nhiệt.
+                        </p>
+                    </div>
+                    <div class="text-xs font-mono text-[#00F5D4]">Tia lửa điện kích hoạt</div>
+                </div>
+
+                <div class="glass-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="w-12 h-12 rounded-2xl bg-[#FF2A85]/10 border border-[#FF2A85]/30 flex items-center justify-center text-[#FF2A85] group-hover:scale-110 transition-transform">
+                        <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-bold text-white">03. Enzyme sinh học</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Trong cơ thể người ($37^\circ\text{C}$), các phản ứng sinh hóa cần $E_a$ rất lớn nếu không có enzyme. Enzyme đóng vai trò hạ thấp $E_a$ xuống mức thấp để phản ứng xảy ra tức thời, duy trì sự sống.
+                        </p>
+                    </div>
+                    <div class="text-xs font-mono text-[#FF2A85]">Hạ rào cản sinh học</div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 5: CƠ CHẾ VA CHẠM & LAB 1 ================= -->
+        <section class="slide-container" data-slide="5">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Phần 01 &bull; Mô phỏng tương tác</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Cơ chế va chạm hiệu quả & Molecular Collision Lab</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="glass-card p-6 rounded-3xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="info" class="w-5 h-5 text-[#00F5D4]"></i> Điều kiện va chạm phản ứng
+                        </h3>
+                        <ul class="space-y-3 text-slate-300 text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="w-2 h-2 rounded-full bg-[#00F5D4] mt-2 shrink-0"></span>
+                                <span>Phản ứng chỉ xảy ra khi các phân tử chất tham gia <strong class="text-white">va chạm vào nhau</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-2 h-2 rounded-full bg-[#FF2A85] mt-2 shrink-0"></span>
+                                <span><strong class="text-white">Va chạm hiệu quả:</strong> Va chạm giữa các phân tử có năng lượng đủ lớn (≥ $E_a$) và đúng hướng không gian.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-2 h-2 rounded-full bg-[#FF7B00] mt-2 shrink-0"></span>
+                                <span>Tăng nhiệt độ $T$ hoặc nồng độ làm tăng số lượng va chạm hiệu quả $\rightarrow$ tăng tốc độ phản ứng.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-3xl space-y-4">
+                        <h4 class="text-sm font-bold text-[#00F5D4] uppercase font-mono">Bảng điều khiển Lab</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                    <span>Nhiệt độ hệ thống ($T$):</span>
+                                    <span id="temp-val" class="text-[#00F5D4] font-bold">300 K</span>
+                                </div>
+                                <input type="range" id="temp-slider" min="200" max="700" value="300" class="w-full accent-[#00F5D4] cursor-pointer" oninput="updateCollisionLab()">
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                    <span>Rào cản năng lượng ($E_a$):</span>
+                                    <span id="ea-val" class="text-[#FF2A85] font-bold">50 kJ/mol</span>
+                                </div>
+                                <input type="range" id="ea-slider" min="10" max="90" value="50" class="w-full accent-[#FF2A85] cursor-pointer" oninput="updateCollisionLab()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 glass-card p-6 rounded-3xl flex flex-col items-center relative overflow-hidden h-[420px]">
+                    <div class="absolute top-4 left-6 flex items-center gap-4 z-10 text-xs font-mono">
+                        <span class="px-3 py-1 rounded-full bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4]">
+                            Va chạm hiệu quả: <strong id="succ-count" class="text-white">0</strong>
+                        </span>
+                        <span class="px-3 py-1 rounded-full bg-[#FF2A85]/10 border border-[#FF2A85]/30 text-[#FF2A85]">
+                            Tổng va chạm: <strong id="total-count" class="text-0">0</strong>
+                        </span>
+                    </div>
+                    <canvas id="collision-canvas" class="w-full h-full rounded-2xl cursor-crosshair mt-8"></canvas>
+                    <div class="absolute bottom-4 text-xs text-slate-400 text-center">
+                        Mẹo: Kéo tăng nhiệt độ $T$ để các hạt chuyển động nhanh hơn và vượt rào cản năng lượng tạo sản phẩm!
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 6: PHƯƠNG TRÌNH ARRHENIUS ================= -->
+        <section class="slide-container" data-slide="6">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Phần 01 &bull; Toán học hóa học</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Phương trình kinh nghiệm Arrhenius</h2>
+            </div>
+
+            <div class="space-y-6 my-auto">
+                <div class="glass-card p-8 rounded-3xl text-center space-y-4 border-2 border-[#00F5D4]/30 neon-glow-cyan max-w-4xl mx-auto">
+                    <span class="text-xs font-mono text-[#00F5D4] uppercase tracking-wider">Công trình của Svante Arrhenius (1889)</span>
+                    <div class="text-3xl md:text-5xl font-extrabold text-white py-2">
+                        $$k = A \cdot e^{-\frac{E_a}{RT}}$$
+                    </div>
+                    <p class="text-slate-300 text-sm max-w-xl mx-auto">
+                        Phương trình biểu diễn định lượng mối quan hệ giữa hằng số tốc độ phản ứng $k$ và nhiệt độ tuyệt đối $T$, năng lượng hoạt hóa $E_a$.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
+                    <div class="glass-card p-4 rounded-2xl space-y-1">
+                        <div class="text-[#00F5D4] font-mono font-bold text-lg">$k$</div>
+                        <div class="text-white text-sm font-semibold">Hằng số tốc độ phản ứng</div>
+                        <div class="text-slate-400 text-xs">Phụ thuộc vào nhiệt độ và bản chất phản ứng.</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl space-y-1">
+                        <div class="text-[#FF2A85] font-mono font-bold text-lg">$A$</div>
+                        <div class="text-white text-sm font-semibold">Hằng số tần số (Pre-exponential)</div>
+                        <div class="text-slate-400 text-xs">Đặc trưng cho tần suất va chạm không gian.</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl space-y-1">
+                        <div class="text-[#FF7B00] font-mono font-bold text-lg">$e \approx 2{,}7183$</div>
+                        <div class="text-white text-sm font-semibold">Cơ số logarit tự nhiên</div>
+                        <div class="text-slate-400 text-xs">Hằng số toán học phổ biến trong tăng trưởng tự nhiên.</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl space-y-1">
+                        <div class="text-[#00F5D4] font-mono font-bold text-lg">$R \approx 8{,}314$</div>
+                        <div class="text-white text-sm font-semibold">Hằng số khí lí tưởng</div>
+                        <div class="text-slate-400 text-xs">Đơn vị: $\text{J/(mol}\cdot\text{K)}$.</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl space-y-1">
+                        <div class="text-[#FF2A85] font-mono font-bold text-lg">$T$</div>
+                        <div class="text-white text-sm font-semibold">Nhiệt độ tuyệt đối</div>
+                        <div class="text-slate-400 text-xs">Tính bằng thang Kelvin ($\text{K} = ^\circ\text{C} + 273$).</div>
+                    </div>
+                    <div class="glass-card p-4 rounded-2xl space-y-1">
+                        <div class="text-[#FF7B00] font-mono font-bold text-lg">$E_a$</div>
+                        <div class="text-white text-sm font-semibold">Năng lượng hoạt hóa</div>
+                        <div class="text-slate-400 text-xs">Đơn vị: $\text{J/mol}$ hoặc $\text{kJ/mol}$.</div>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 7: ẢNH HƯỞNG CỦA Ea VÀ NHIỆT ĐỘ T ================= -->
+        <section class="slide-container" data-slide="7">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Phần 01 &bull; Biến thiên yếu tố</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Ảnh hưởng của năng lượng hoạt hóa $E_a$ và Nhiệt độ $T$</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-auto">
+                <div class="glass-card p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 flex items-center justify-center text-[#00F5D4]">
+                            <i data-lucide="trending-down" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Ảnh hưởng của $E_a$</h3>
+                        <ul class="space-y-3 text-slate-300 text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="text-[#00F5D4] font-bold">&bull;</span>
+                                <span><strong class="text-white">$E_a$ càng lớn:</strong> Số phân tử đạt đủ năng lượng hoạt động càng ít, số va chạm hiệu quả nhỏ $\rightarrow$ tốc độ phản ứng càng chậm.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-[#00F5D4] font-bold">&bull;</span>
+                                <span><strong class="text-white">$E_a$ càng nhỏ:</strong> Rào cản thấp, số phân tử vượt rào nhiều $\rightarrow$ tốc độ phản ứng diễn ra rất nhanh (như phản ứng cháy nổ).</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-[#00F5D4]/5 border border-[#00F5D4]/20 text-xs text-[#00F5D4] font-mono">
+                        📉 $E_a \downarrow \implies k \uparrow \implies \text{Tốc độ phản ứng tăng mạnh}$
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-[#FF2A85]/10 border border-[#FF2A85]/30 flex items-center justify-center text-[#FF2A85]">
+                            <i data-lucide="thermometer" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Ảnh hưởng của Nhiệt độ $T$</h3>
+                        <ul class="space-y-3 text-slate-300 text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="text-[#FF2A85] font-bold">&bull;</span>
+                                <span><strong class="text-white">Nhiệt độ $T$ tăng:</strong> Động năng trung bình của các phân tử tăng lên rõ rệt, tỷ lệ phân tử có năng lượng $\ge E_a$ tăng vọt.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-[#FF2A85] font-bold">&bull;</span>
+                                <span>Tỷ số $-\frac{E_a}{RT}$ bớt âm hơn $\implies$ hằng số tốc độ $k$ tăng theo hàm mũ $\implies$ tốc độ phản ứng tăng đột biến.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-[#FF2A85]/5 border border-[#FF2A85]/20 text-xs text-[#FF2A85] font-mono">
+                        📈 $T \uparrow \implies k \uparrow \uparrow \implies \text{Tốc độ tăng theo hàm mũ}$
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 8: BÀI TOÁN ARRHENIUS 1 & 2 ================= -->
+        <section class="slide-container" data-slide="8">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Phần 01 &bull; Vận dụng thực chiến</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Công thức hai nhiệt độ & Bài toán 1 - 2</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-auto">
+                <!-- Bài toán 1 -->
+                <div class="glass-card p-6 rounded-3xl space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono text-[#00F5D4]">BÀI TOÁN 01</span>
+                            <span class="text-xs text-slate-400">Tăng nhiệt độ $300\text{K} \rightarrow 400\text{K}$</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">
+                            Cho $E_a = 70\text{ kJ/mol}$. Tăng $T_1 = 300\text{K}$ lên $T_2 = 400\text{K}$, tốc độ phản ứng thay đổi thế nào?
+                        </h3>
+                    </div>
+                    <div id="step-box-1" class="hidden space-y-2 p-4 rounded-2xl bg-slate-900/60 border border-white/10 text-xs text-slate-300">
+                        <div class="text-[#00F5D4] font-bold">&bull; Bước 1: Áp dụng công thức Arrhenius 2 nhiệt độ</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $\ln\left(\frac{k_{T_2}}{k_{T_1}}\right) = \frac{70 \times 10^3}{8{,}314} \cdot \left(\frac{1}{300} - \frac{1}{400}\right) \approx 7{,}016$
+                        </div>
+                        <div class="text-[#FF2A85] font-bold">&bull; Bước 2: Tính tỷ số $k_{T_2} / k_{T_1}$</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $\frac{k_{T_2}}{k_{T_1}} = e^{7{,}016} \approx \mathbf{1115}\text{ lần}$. Tốc độ tăng vọt $1115$ lần!
+                        </div>
+                    </div>
+                    <button onclick="toggleStep(1); playSound('click');" id="btn-step-1" class="w-full py-2.5 rounded-xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] text-sm font-semibold hover:bg-[#00F5D4]/20 transition-colors">
+                        Xem lời giải chi tiết (Step-by-step)
+                    </button>
+                </div>
+
+                <!-- Bài toán 2 -->
+                <div class="glass-card p-6 rounded-3xl space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono text-[#FF2A85]">BÀI TOÁN 02</span>
+                            <span class="text-xs text-slate-400">Phản ứng $2\text{NOCl} \rightarrow 2\text{NO} + \text{Cl}_2$</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">
+                            $E_a = 100\text{ kJ/mol}$. Ở $350\text{K}$, $k = 8 \times 10^{-6}$. Tính $k$ ở $400\text{K}$.
+                        </h3>
+                    </div>
+                    <div id="step-box-2" class="hidden space-y-2 p-4 rounded-2xl bg-slate-900/60 border border-white/10 text-xs text-slate-300">
+                        <div class="text-[#00F5D4] font-bold">&bull; Bước 1: Lập phương trình logarit</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $\ln\left(\frac{k_{400}}{8 \times 10^{-6}}\right) = \frac{100 \times 10^3}{8{,}314} \cdot \left(\frac{1}{350} - \frac{1}{400}\right) \approx 4{,}296$
+                        </div>
+                        <div class="text-[#FF2A85] font-bold">&bull; Bước 2: Suy ra $k_{400}$</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $k_{400} = 8 \times 10^{-6} \times e^{4{,}296} \approx \mathbf{5{,}87 \times 10^{-4}}\text{ L/(mol}\cdot\text{s)}$.
+                        </div>
+                    </div>
+                    <button onclick="toggleStep(2); playSound('click');" id="btn-step-2" class="w-full py-2.5 rounded-xl bg-[#FF2A85]/10 border border-[#FF2A85]/30 text-[#FF2A85] text-sm font-semibold hover:bg-[#FF2A85]/20 transition-colors">
+                        Xem lời giải chi tiết (Step-by-step)
+                    </button>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 9: BÀI TOÁN ARRHENIUS 3 & 4 ================= -->
+        <section class="slide-container" data-slide="9">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#00F5D4]">Phần 01 &bull; Nâng cao</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Bài toán vận dụng Arrhenius 3 - 4</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 my-auto">
+                <!-- Bài toán 3 -->
+                <div class="glass-card p-6 rounded-3xl space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono text-[#00F5D4]">BÀI TOÁN 03</span>
+                            <span class="text-xs text-slate-400">Tìm năng lượng hoạt hóa $E_a$</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">
+                            Nhiệt độ tăng từ $300\text{K}$ lên $310\text{K}$ thì tốc độ phản ứng tăng $3$ lần. Tính $E_a$?
+                        </h3>
+                    </div>
+                    <div id="step-box-3" class="hidden space-y-2 p-4 rounded-2xl bg-slate-900/60 border border-white/10 text-xs text-slate-300">
+                        <div class="text-[#00F5D4] font-bold">&bull; Bước 1: Tỷ số tốc độ $k_{310}/k_{300} = 3$</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $\ln(3) = \frac{E_a}{8{,}314} \cdot \left(\frac{1}{300} - \frac{1}{310}\right) \implies 1{,}0986 = E_a \times 1{,}29 \times 10^{-5}$
+                        </div>
+                        <div class="text-[#FF2A85] font-bold">&bull; Bước 2: Kết quả $E_a$</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $E_a \approx \mathbf{85{,}163}\text{ kJ/mol}$.
+                        </div>
+                    </div>
+                    <button onclick="toggleStep(3); playSound('click');" id="btn-step-3" class="w-full py-2.5 rounded-xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] text-sm font-semibold hover:bg-[#00F5D4]/20 transition-colors">
+                        Xem lời giải chi tiết (Step-by-step)
+                    </button>
+                </div>
+
+                <!-- Bài toán 4 -->
+                <div class="glass-card p-6 rounded-3xl space-y-4 flex flex-col justify-between">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono text-[#FF2A85]">BÀI TOÁN 04</span>
+                            <span class="text-xs text-slate-400">Phản ứng phân hủy $2\text{N}_2\text{O}_5$</span>
+                        </div>
+                        <h3 class="text-base font-bold text-white">
+                            $E_a = 103{,}5\text{ kJ/mol}$. Ở $45^\circ\text{C}$ có $k = 8{,}17 \times 10^{-3}\text{ s}^{-1}$. Tính $k$ ở $65^\circ\text{C}$.
+                        </h3>
+                    </div>
+                    <div id="step-box-4" class="hidden space-y-2 p-4 rounded-2xl bg-slate-900/60 border border-white/10 text-xs text-slate-300">
+                        <div class="text-[#00F5D4] font-bold">&bull; Bước 1: Quy đổi sang độ Kelvin</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $T_1 = 318\text{K}$, $T_2 = 338\text{K}$. $\ln\left(\frac{k_{338}}{8{,}17 \times 10^{-3}}\right) = \frac{103{,}5 \times 10^3}{8{,}314} \cdot \left(\frac{1}{318} - \frac{1}{338}\right) \approx 2{,}317$
+                        </div>
+                        <div class="text-[#FF2A85] font-bold">&bull; Bước 2: Kết quả $k_{338}$</div>
+                        <div class="font-mono bg-black/40 p-2 rounded">
+                            $k_{338} = 8{,}17 \times 10^{-3} \times e^{2{,}317} \approx \mathbf{0{,}0829}\text{ s}^{-1}$.
+                        </div>
+                    </div>
+                    <button onclick="toggleStep(4); playSound('click');" id="btn-step-4" class="w-full py-2.5 rounded-xl bg-[#FF2A85]/10 border border-[#FF2A85]/30 text-[#FF2A85] text-sm font-semibold hover:bg-[#FF2A85]/20 transition-colors">
+                        Xem lời giải chi tiết (Step-by-step)
+                    </button>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 10: CHẤT XÚC TÁC & 5 ĐẶC ĐIỂM ================= -->
+        <section class="slide-container" data-slide="10">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#FF2A85]">Phần 02 &bull; Chất xúc tác</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Chất xúc tác & 5 đặc điểm cốt lõi</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+                <div class="lg:col-span-4 glass-card p-6 rounded-3xl space-y-4">
+                    <div class="w-12 h-12 rounded-2xl bg-[#FF2A85]/10 border border-[#FF2A85]/30 flex items-center justify-center text-[#FF2A85]">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Định nghĩa</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Chất xúc tác là chất làm tăng tốc độ phản ứng nhưng <strong class="text-white">không bị tiêu hao</strong> (không đổi về khối lượng và bản chất hóa học) sau khi phản ứng kết thúc.
+                    </p>
+                    <div class="p-3 rounded-xl bg-[#FF2A85]/5 border border-[#FF2A85]/20 text-xs text-[#FF2A85]">
+                        🧪 Ví dụ: $\text{N}_2(g) + 3\text{H}_2(g) \rightleftharpoons 2\text{NH}_3(g)$ (Xúc tác $\text{Fe}$ nhiệt độ cao).
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="text-xs font-mono text-[#FF2A85]">ĐẶC ĐIỂM 01</div>
+                        <h4 class="font-bold text-white text-sm">Không bị tiêu hao & Không đổi cân bằng</h4>
+                        <p class="text-slate-400 text-xs">Giữ nguyên vẹn sau phản ứng; chỉ giúp đạt trạng thái cân bằng nhanh hơn chứ không làm đổi lượng sản phẩm tối đa.</p>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="text-xs font-mono text-[#00F5D4]">ĐẶC ĐIỂM 02</div>
+                        <h4 class="font-bold text-white text-sm">Giảm năng lượng hoạt hóa</h4>
+                        <p class="text-slate-400 text-xs">Tạo ra con đường phản ứng mới với $E_a$ thấp hơn, giúp phân tử dễ dàng vượt rào cản.</p>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="text-xs font-mono text-[#FF7B00]">ĐẶC ĐIỂM 03 & 04</div>
+                        <h4 class="font-bold text-white text-sm">Tính chọn lọc & Phản ứng một chiều</h4>
+                        <p class="text-slate-400 text-xs">Mỗi chất xúc tác chỉ tác dụng lên một phản ứng nhất định và chỉ làm tăng tốc chiều phản ứng vốn có.</p>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="text-xs font-mono text-[#9d4edd]">ĐẶC ĐIỂM 05</div>
+                        <h4 class="font-bold text-white text-sm">Phản ứng thuận nghịch</h4>
+                        <p class="text-slate-400 text-xs">Làm tăng tốc độ cả chiều thuận và nghịch như nhau; không làm thay đổi biến thiên enthalpy $\Delta_r H$.</p>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 11: GIẢN ĐỒ NĂNG LƯỢNG & LAB 2 ================= -->
+        <section class="slide-container" data-slide="11">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#FF2A85]">Phần 02 &bull; Giản đồ SVG động</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Giản đồ Năng lượng hoạt hóa & So sánh xúc tác</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+                <div class="lg:col-span-7 glass-card p-6 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-[#FF2A85]">ĐỒ THỊ TIẾN TRÌNH PHẢN ỨNG</span>
+                        <div class="flex gap-2">
+                            <button onclick="setCatalystMode(false)" id="btn-nocat" class="px-3 py-1.5 rounded-lg bg-[#FF2A85]/20 text-[#FF2A85] text-xs font-bold border border-[#FF2A85]/40 transition-all">Không xúc tác</button>
+                            <button onclick="setCatalystMode(true)" id="btn-hascat" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold border border-white/10 transition-all">Có xúc tác</button>
+                        </div>
+                    </div>
+                    
+                    <!-- SVG Chart Container -->
+                    <div class="relative w-full h-[280px] bg-slate-950/60 rounded-2xl border border-white/10 p-4 flex items-center justify-center">
+                        <svg viewBox="0 0 500 250" class="w-full h-full">
+                            <!-- Trục tọa độ -->
+                            <line x1="50" y1="210" x2="470" y2="210" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                            <line x1="50" y1="20" x2="50" y2="210" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                            <text x="470" y="230" fill="#94a3b8" font-size="10" font-family="monospace">Tiến trình phản ứng</text>
+                            <text x="15" y="30" fill="#94a3b8" font-size="10" font-family="monospace">Năng lượng</text>
+                            
+                            <!-- Mức chất đầu & sản phẩm -->
+                            <line x1="50" y1="160" x2="120" y2="160" stroke="#00F5D4" stroke-dasharray="4" stroke-width="2"/>
+                            <text x="60" y="150" fill="#00F5D4" font-size="10" font-weight="bold">Chất đầu (Reactants)</text>
+
+                            <line x1="380" y1="100" x2="450" y2="100" stroke="#FF7B00" stroke-dasharray="4" stroke-width="2"/>
+                            <text x="370" y="90" fill="#FF7B00" font-size="10" font-weight="bold">Sản phẩm (Products)</text>
+
+                            <!-- Đường không xúc tác (1 đỉnh cao) -->
+                            <path id="path-nocat" d="M 120 160 Q 250 10 380 100" fill="none" stroke="#FF2A85" stroke-width="4" class="transition-all duration-500"/>
+                            
+                            <!-- Đường có xúc tác (2 đỉnh thấp trung gian) -->
+                            <path id="path-hascat" d="M 120 160 Q 200 90 250 110 Q 300 90 380 100" fill="none" stroke="#00F5D4" stroke-width="4" opacity="0" class="transition-all duration-500"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="glass-card p-6 rounded-3xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="zap" class="w-5 h-5 text-[#FF2A85]"></i> Phân tích giản đồ năng lượng
+                        </h3>
+                        <ul class="space-y-3 text-slate-300 text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="w-2 h-2 rounded-full bg-[#FF2A85] mt-2 shrink-0"></span>
+                                <span><strong class="text-white">Không xúc tác (Đường hồng):</strong> Rào cản năng lượng $E_a$ rất cao, phản ứng diễn ra chậm.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-2 h-2 rounded-full bg-[#00F5D4] mt-2 shrink-0"></span>
+                                <span><strong class="text-white">Có xúc tác (Đường cyan):</strong> Tạo con đường qua các tiểu phân trung gian với nhiều đỉnh nhưng <strong class="text-[#00F5D4]">thấp hơn hẳn</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="w-2 h-2 rounded-full bg-[#FF7B00] mt-2 shrink-0"></span>
+                                <span>Hiệu ứng nhiệt $\Delta_r H$ (chênh lệch năng lượng đầu và cuối) <strong class="text-white">hoàn toàn không đổi</strong>.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 12: ỨNG DỤNG CÔNG NGHIỆP & ETHANOL ROUTER ================= -->
+        <section class="slide-container" data-slide="12">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#FF2A85]">Phần 02 &bull; Ứng dụng công nghiệp</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Sơ đồ rẽ nhánh tương tác Ethanol ($\text{C}_2\text{H}_5\text{OH}$)</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto items-center">
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="glass-card p-6 rounded-3xl space-y-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-5 h-5 text-[#FF2A85]"></i> Tính chọn lọc của xúc tác
+                        </h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Từ cùng một nguyên liệu ban đầu là ethanol ($\text{C}_2\text{H}_5\text{OH}$), tùy thuộc vào loại chất xúc tác và nhiệt độ khác nhau, phản ứng sẽ rẽ nhánh tạo ra các sản phẩm hữu cơ khác nhau trong công nghiệp.
+                        </p>
+                        <div class="p-3 rounded-xl bg-[#00F5D4]/5 border border-[#00F5D4]/20 text-xs text-[#00F5D4]">
+                            👉 Click vào từng điều kiện xúc tác bên phải để xem sản phẩm tương ứng!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7 glass-card p-6 rounded-3xl space-y-4">
+                    <div class="text-center font-mono text-sm text-[#00F5D4] py-2 bg-slate-950/60 rounded-xl border border-white/10">
+                        Nguyên liệu trung tâm: <strong class="text-white">C₂H₅OH (Ethanol)</strong>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div onclick="selectEthanolBranch(1)" id="branch-btn-1" class="glass-card p-4 rounded-2xl cursor-pointer border border-white/10 hover:border-[#FF2A85] transition-all space-y-1">
+                            <div class="text-xs font-mono text-[#FF2A85]">Nhánh 01</div>
+                            <div class="text-white font-bold text-sm">Ag, $550^\circ\text{C}$</div>
+                            <div id="branch-res-1" class="text-slate-400 text-xs">Sản phẩm: Đang chọn...</div>
+                        </div>
+
+                        <div onclick="selectEthanolBranch(2)" id="branch-btn-2" class="glass-card p-4 rounded-2xl cursor-pointer border border-white/10 hover:border-[#00F5D4] transition-all space-y-1">
+                            <div class="text-xs font-mono text-[#00F5D4]">Nhánh 02</div>
+                            <div class="text-white font-bold text-sm">$\text{H}_2\text{SO}_4$ đặc, $140^\circ\text{C}$</div>
+                            <div id="branch-res-2" class="text-slate-400 text-xs">Sản phẩm: Đang chọn...</div>
+                        </div>
+
+                        <div onclick="selectEthanolBranch(3)" id="branch-btn-3" class="glass-card p-4 rounded-2xl cursor-pointer border border-white/10 hover:border-[#FF7B00] transition-all space-y-1">
+                            <div class="text-xs font-mono text-[#FF7B00]">Nhánh 03</div>
+                            <div class="text-white font-bold text-sm">$\text{Al}_2\text{O}_3$, $350^\circ\text{C}$</div>
+                            <div id="branch-res-3" class="text-slate-400 text-xs">Sản phẩm: Đang chọn...</div>
+                        </div>
+
+                        <div onclick="selectEthanolBranch(4)" id="branch-btn-4" class="glass-card p-4 rounded-2xl cursor-pointer border border-white/10 hover:border-[#9d4edd] transition-all space-y-1">
+                            <div class="text-xs font-mono text-[#9d4edd]">Nhánh 04</div>
+                            <div class="text-white font-bold text-sm">$\text{ZnO}, \text{Cr}_2\text{O}_3$, $450^\circ\text{C}$</div>
+                            <div id="branch-res-4" class="text-slate-400 text-xs">Sản phẩm: Đang chọn...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 13: ỨNG DỤNG MÔI TRƯỜNG & HÓA SINH ================= -->
+        <section class="slide-container" data-slide="13">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#FF2A85]">Phần 02 &bull; Đời sống & Môi trường</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Vai trò xúc tác trong Môi trường & Hóa sinh</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-auto">
+                <div class="glass-card p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-[#FF2A85]/10 border border-[#FF2A85]/30 flex items-center justify-center text-[#FF2A85]">
+                            <i data-lucide="shield-alert" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Môi trường: Phá hủy tầng Ozone</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Gốc tự do chlorine ($\text{Cl}$) từ hợp chất CFCs đóng vai trò là <strong class="text-white">chất xúc tác</strong> phá hủy ozone ($\text{O}_3$) qua chu kỳ liên tục:
+                        </p>
+                        <div class="p-3 rounded-2xl bg-slate-900/60 border border-white/10 text-xs font-mono space-y-1 text-slate-300">
+                            <div>$\text{Cl} + \text{O}_3 \rightarrow \text{ClO} + \text{O}_2$ (Bước 1)</div>
+                            <div>$\text{ClO} + \text{O}_3 \rightarrow \text{Cl} + 2\text{O}_2$ (Bước 2)</div>
+                        </div>
+                        <p class="text-slate-400 text-xs">
+                            Gốc $\text{Cl}$ được tái tạo nguyên vẹn sau chu kỳ, liên tục tàn phá hàng vạn phân tử $\text{O}_3$ mà không bị tiêu hao!
+                        </p>
+                    </div>
+                    <div class="text-xs font-mono text-[#FF2A85]">Cảnh báo thủng tầng Ozone</div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 flex items-center justify-center text-[#00F5D4]">
+                            <i data-lucide="activity" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">Hóa sinh & Đời sống hằng ngày</h3>
+                        <ul class="space-y-3 text-slate-300 text-sm">
+                            <li class="flex items-start gap-3">
+                                <span class="text-[#00F5D4] font-bold">&bull;</span>
+                                <span><strong class="text-white">Enzyme cơ thể:</strong> Duy trì các phản ứng trao đổi chất ở nhiệt độ $37^\circ\text{C}$ mà không cần nhiệt độ cao.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="text-[#00F5D4] font-bold">&bull;</span>
+                                <span><strong class="text-white">Lên men thực phẩm:</strong> Ứng dụng enzyme vi sinh vật để làm giấm ăn, ủ rượu, làm sữa chua nhanh chóng ở nhiệt độ thường.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="text-xs font-mono text-[#00F5D4]">Xúc tác sinh học tự nhiên</div>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 14: LUYỆN TẬP & TRẮC NGHIỆM ================= -->
+        <section class="slide-container" data-slide="14">
+            <div class="space-y-2">
+                <div class="text-xs uppercase font-mono tracking-widest text-[#FF7B00]">Phần 03 &bull; Mini-game trắc nghiệm</div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Thử thách củng cố kiến thức (5 Câu hỏi)</h2>
+            </div>
+
+            <div id="quiz-wrapper" class="glass-card p-8 rounded-3xl max-w-3xl mx-auto my-auto space-y-6">
+                <div class="flex items-center justify-between">
+                    <span id="quiz-progress" class="text-xs font-mono text-[#FF7B00]">CÂU HỎI 1 / 5</span>
+                    <span id="quiz-score" class="text-xs font-mono text-white">Điểm: 0</span>
+                </div>
+                
+                <h3 id="quiz-question" class="text-xl font-bold text-white">Đang tải câu hỏi...</h3>
+                
+                <div id="quiz-options" class="grid grid-cols-1 gap-3">
+                    <!-- Options injected via JS -->
+                </div>
+
+                <div id="quiz-feedback" class="hidden p-4 rounded-2xl bg-slate-900/80 border border-white/10 text-sm text-slate-300">
+                    <!-- Feedback injected via JS -->
+                </div>
+
+                <div class="flex justify-end">
+                    <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#FF7B00] to-[#FF2A85] text-slate-950 font-bold text-sm">
+                        Câu hỏi tiếp theo <i data-lucide="arrow-right" class="w-4 h-4 inline ml-1"></i>
+                    </button>
+                </div>
+            </div>
+            <div></div>
+        </section>
+
+        <!-- ================= SLIDE 15: LỜI CẢM ƠN & FINALE ================= -->
+        <section class="slide-container" data-slide="15">
+            <div></div>
+            <div class="max-w-4xl mx-auto text-center space-y-8 my-auto">
+                <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full glass-panel border border-[#00F5D4]/30 text-[#00F5D4] text-sm font-semibold tracking-wider uppercase">
+                    <i data-lucide="award" class="w-4 h-4"></i> HOÀN THÀNH BÀI THUYẾT TRÌNH
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                    CẢM ƠN CÔ VÀ CÁC BẠN <br><span class="text-gradient">ĐÃ LẮNG NGHE!</span>
+                </h1>
+                <p class="text-slate-400 text-lg max-w-xl mx-auto font-light">
+                    Chuyên đề 1 - Bài 3: Năng lượng hoạt hóa &bull; Thực hiện bởi <strong class="text-white font-semibold">Tổ 3 - Lớp 10A06</strong>.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <button onclick="goToSlide(1); playSound('click');" class="px-6 py-3 rounded-2xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4] font-bold text-sm hover:bg-[#00F5D4]/20 transition-all">
+                        Quay lại trang đầu
+                    </button>
+                    <button onclick="resetQuiz(); goToSlide(14); playSound('click');" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#00F5D4] to-[#FF2A85] text-slate-950 font-bold text-sm shadow-lg">
+                        Làm lại Quiz
+                    </button>
+                </div>
+            </div>
+            <div class="text-center text-slate-500 text-xs font-mono">
+                Tổ 3 - 10A06 &bull; Chúc cô và các bạn một ngày tốt lành!
+            </div>
+        </section>
+
+        <!-- ================= FLOATING NAVIGATION DOCK ================= -->
+        <nav aria-label="Thanh điều khiển trình chiếu" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50 glass-panel px-6 py-3 rounded-full flex items-center gap-6 shadow-2xl border border-white/10">
+            <button onclick="prevSlide(); playSound('click');" aria-label="Slide trước" class="text-slate-300 hover:text-[#00F5D4] transition-colors" title="Slide trước (Mũi tên trái)">
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+            <div class="flex items-center gap-2 font-mono text-xs text-slate-300">
+                <span id="current-slide-num" class="text-[#00F5D4] font-bold text-sm">1</span>
+                <span>/</span>
+                <span id="total-slides-num" class="text-slate-400">15</span>
+            </div>
+            <button onclick="nextSlide(); playSound('click');" aria-label="Slide sau" class="text-slate-300 hover:text-[#00F5D4] transition-colors" title="Slide sau (Mũi tên phải / Space)">
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+            <div class="w-px h-5 bg-white/10"></div>
+            <button onclick="toggleAudio();" id="audio-toggle-btn" aria-label="Bật/tắt âm thanh giao diện" class="text-slate-300 hover:text-[#00F5D4] transition-colors" title="Bật/Tắt Âm thanh">
+                <i data-lucide="volume-2" class="w-5 h-5" id="audio-icon"></i>
+            </button>
+            <button onclick="toggleFullScreen();" aria-label="Chế độ toàn màn hình" class="text-slate-300 hover:text-[#00F5D4] transition-colors" title="Toàn màn hình (F)">
+                <i data-lucide="maximize" class="w-5 h-5"></i>
+            </button>
+        </nav>
+
+    </main>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- STATE MANAGEMENT ---
+        let currentSlide = 1;
+        const totalSlides = 15;
+        let soundEnabled = true;
+
+        // --- WEB AUDIO API SYNTHESIZER ---
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'success') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(165, now + 0.15);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                }
+            } catch (e) {
+                console.error("Audio error:", e);
+            }
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('audio-icon');
+            if (soundEnabled) {
+                icon.setAttribute('data-lucide', 'volume-2');
+            } else {
+                icon.setAttribute('data-lucide', 'volume-x');
+            }
+            lucide.createIcons();
+            playSound('click');
+        }
+
+        // --- NAVIGATION ENGINE ---
+        function goToSlide(slideNum) {
+            if (slideNum < 1 || slideNum > totalSlides) return;
+            
+            const currentEl = document.querySelector(`.slide-container[data-slide="${currentSlide}"]`);
+            const nextEl = document.querySelector(`.slide-container[data-slide="${slideNum}"]`);
+
+            if (currentEl && nextEl) {
+                gsap.to(currentEl, {
+                    opacity: 0,
+                    scale: 0.98,
+                    duration: 0.3,
+                    onComplete: () => {
+                        currentEl.classList.remove('active');
+                        currentEl.style.display = 'none';
+                        
+                        nextEl.style.display = 'flex';
+                        gsap.fromTo(nextEl, 
+                            { opacity: 0, scale: 1.02 },
+                            { opacity: 1, scale: 1, duration: 0.4, ease: "power2.out" }
+                        );
+                        nextEl.classList.add('active');
+                        currentSlide = slideNum;
+                        document.getElementById('current-slide-num').innerText = currentSlide;
+                        
+                        // Render KaTeX in active slide if needed
+                        renderMathInElement(nextEl, {
+                            delimiters: [
+                                {left: "$$", right: "$$", display: true},
+                                {left: "$", right: "$", display: false}
+                            ],
+                            throwOnError: false
+                        });
+                    }
+                });
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // Keyboard Controls
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullScreen();
+            }
+        });
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.error("Error attempting to enable fullscreen:", err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // --- STEP REVEAL FOR SLIDES 8 & 9 ---
+        function toggleStep(id) {
+            const box = document.getElementById(`step-box-${id}`);
+            const btn = document.getElementById(`btn-step-${id}`);
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                btn.innerText = "Ẩn lời giải chi tiết";
+                playSound('success');
+            } else {
+                box.classList.add('hidden');
+                btn.innerText = "Xem lời giải chi tiết (Step-by-step)";
+                playSound('click');
+            }
+        }
+
+        // --- ETHANOL BRANCH ROUTER (SLIDE 12) ---
+        function selectEthanolBranch(branchId) {
+            playSound('click');
+            // Reset all borders
+            for (let i = 1; i <= 4; i++) {
+                const btn = document.getElementById(`branch-btn-${i}`);
+                btn.classList.remove('border-[#00F5D4]', 'border-[#FF2A85]', 'border-[#FF7B00]', 'border-[#9d4edd]', 'neon-glow-cyan');
+            }
+            const activeBtn = document.getElementById(`branch-btn-${branchId}`);
+            activeBtn.classList.add('border-[#00F5D4]', 'neon-glow-cyan');
+
+            const results = [
+                "",
+                "Sản phẩm: CH₃CHO (Acetaldehyde) - Phản ứng oxi hóa không hoàn toàn.",
+                "Sản phẩm: (C₂H₅)₂O (Diethyl ether) - Phản ứng tách nước ở 140°C.",
+                "Sản phẩm: CH₂=CH₂ (Ethylene) - Phản ứng dehydrat hóa ở 350°C.",
+                "Sản phẩm: CH₂=CH-CH=CH₂ (Buta-1,3-diene) - Phản ứng Lebedev tổng hợp cao su."
+            ];
+
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`branch-res-${i}`).innerText = `Sản phẩm: Đang chọn...`;
+            }
+            document.getElementById(`branch-res-${branchId}`).innerText = results[branchId];
+            document.getElementById(`branch-res-${branchId}`).classList.add('text-[#00F5D4]', 'font-bold');
+        }
+
+        // --- SVG CATALYST TOGGLE (SLIDE 11) ---
+        function setCatalystMode(hasCat) {
+            playSound('click');
+            const pathNoCat = document.getElementById('path-nocat');
+            const pathHasCat = document.getElementById('path-hascat');
+            const btnNoCat = document.getElementById('btn-nocat');
+            const btnHasCat = document.getElementById('btn-hascat');
+
+            if (hasCat) {
+                pathNoCat.style.opacity = '0.2';
+                pathHasCat.style.opacity = '1';
+                btnNoCat.className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold border border-white/10 transition-all';
+                btnHasCat.className = 'px-3 py-1.5 rounded-lg bg-[#00F5D4]/20 text-[#00F5D4] text-xs font-bold border border-[#00F5D4]/40 transition-all';
+            } else {
+                pathNoCat.style.opacity = '1';
+                pathHasCat.style.opacity = '0';
+                btnNoCat.className = 'px-3 py-1.5 rounded-lg bg-[#FF2A85]/20 text-[#FF2A85] text-xs font-bold border border-[#FF2A85]/40 transition-all';
+                btnHasCat.className = 'px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-bold border border-white/10 transition-all';
+            }
+        }
+
+        // --- MOLECULAR COLLISION LAB (SLIDE 5 CANVAS) ---
+        let canvas, ctx;
+        let particles = [];
+        let collisionCount = 0;
+        let totalCollisions = 0;
+
+        function initCollisionLab() {
+            canvas = document.getElementById('collision-canvas');
+            if (!canvas) return;
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Create particles
+            particles = [];
+            for (let i = 0; i < 25; i++) {
+                particles.push({
+                    x: Math.random() * (canvas.width - 40) + 20,
+                    y: Math.random() * (canvas.height - 40) + 20,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4,
+                    radius: 8,
+                    type: i % 2 === 0 ? 'A' : 'B',
+                    active: false
+                });
+            }
+
+            requestAnimationFrame(updateCollisionAnimation);
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        function updateCollisionLab() {
+            const T = parseInt(document.getElementById('temp-slider').value);
+            const Ea = parseInt(document.getElementById('ea-slider').value);
+            document.getElementById('temp-val').innerText = T + ' K';
+            document.getElementById('ea-val').innerText = Ea + ' kJ/mol';
+        }
+
+        function updateCollisionAnimation() {
+            if (!ctx || !canvas) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const T = parseInt(document.getElementById('temp-slider').value) || 300;
+            const Ea = parseInt(document.getElementById('ea-slider').value) || 50;
+            const speedFactor = T / 300;
+
+            // Update & Draw particles
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx * speedFactor * 0.7;
+                p.y += p.vy * speedFactor * 0.7;
+
+                // Bounce walls
+                if (p.x < p.radius || p.x > canvas.width - p.radius) p.vx *= -1;
+                if (p.y < p.radius || p.y > canvas.height - p.radius) p.vy *= -1;
+
+                // Draw particle
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = p.type === 'A' ? '#00F5D4' : '#FF2A85';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = p.type === 'A' ? '#00F5D4' : '#FF2A85';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                // Check collisions with other particles
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dx = p.x - p2.x;
+                    let dy = p.y - p2.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < p.radius + p2.radius) {
+                        // Elastic collision velocity swap
+                        let tempVx = p.vx;
+                        let tempVy = p.vy;
+                        p.vx = p2.vx;
+                        p.vy = p2.vy;
+                        p2.vx = tempVx;
+                        p2.vy = tempVy;
+
+                        totalCollisions++;
+                        document.getElementById('total-count').innerText = totalCollisions;
+
+                        // Effective collision condition: High T and low Ea
+                        if (T >= Ea * 6) {
+                            collisionCount++;
+                            document.getElementById('succ-count').innerText = collisionCount;
+                            // Draw flash effect
+                            ctx.beginPath();
+                            ctx.arc((p.x + p2.x)/2, (p.y + p2.y)/2, 20, 0, Math.PI * 2);
+                            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                            ctx.fill();
+                        }
+                    }
+                }
+            }
+
+            requestAnimationFrame(updateCollisionAnimation);
+        }
+
+        // --- BACKGROUND CANVAS (QUANTUM MESH) ---
+        function initBgCanvas() {
+            const bgCanvas = document.getElementById('bg-canvas');
+            const bgCtx = bgCanvas.getContext('2d');
+            let width = bgCanvas.width = window.innerWidth;
+            let height = bgCanvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = bgCanvas.width = window.innerWidth;
+                height = bgCanvas.height = window.innerHeight;
+            });
+
+            const points = [];
+            for (let i = 0; i < 40; i++) {
+                points.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5
+                });
+            }
+
+            function drawBg() {
+                bgCtx.clearRect(0, 0, width, height);
+                bgCtx.fillStyle = '#060913';
+                bgCtx.fillRect(0, 0, width, height);
+
+                bgCtx.strokeStyle = 'rgba(0, 245, 212, 0.05)';
+                bgCtx.lineWidth = 1;
+
+                for (let i = 0; i < points.length; i++) {
+                    let p = points[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                    bgCtx.beginPath();
+                    bgCtx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+                    bgCtx.fillStyle = 'rgba(0, 245, 212, 0.2)';
+                    bgCtx.fill();
+
+                    for (let j = i + 1; j < points.length; j++) {
+                        let p2 = points[j];
+                        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                        if (dist < 150) {
+                            bgCtx.beginPath();
+                            bgCtx.moveTo(p.x, p.y);
+                            bgCtx.lineTo(p2.x, p2.y);
+                            bgCtx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(drawBg);
+            }
+            drawBg();
+        }
+
+        // --- MINI-GAME QUIZ DATA & ENGINE (SLIDE 14) ---
+        const quizData = [
+            {
+                question: "Năng lượng hoạt hóa (Ea) được định nghĩa là gì?",
+                options: [
+                    "Năng lượng toàn phần của phân tử chất tham gia.",
+                    "Mức năng lượng tối thiểu cần đạt để xảy ra va chạm hiệu quả.",
+                    "Hiệu ứng nhiệt của phản ứng hóa học.",
+                    "Năng lượng giải phóng khi tạo thành sản phẩm."
+                ],
+                correct: 1,
+                explanation: "Đúng! Ea là mức năng lượng tối thiểu mà chất tham gia cần có để va chạm hiệu quả tạo sản phẩm."
+            },
+            {
+                question: "Trong phương trình Arrhenius k = A * exp(-Ea/RT), khi nhiệt độ T tăng thì hằng số tốc độ k sẽ thay đổi thế nào?",
+                options: [
+                    "Giảm xuống rõ rệt.",
+                    "Không thay đổi.",
+                    "Tăng lên theo hàm mũ.",
+                    "Bằng không."
+                ],
+                correct: 2,
+                explanation: "Chính xác! Nhiệt độ tăng làm giảm giá trị số mũ âm, khiến hằng số tốc độ k tăng vọt theo hàm mũ."
+            },
+            {
+                question: "Chất xúc tác có đặc điểm nào sau đây trong phản ứng thuận nghịch?",
+                options: [
+                    "Làm thay đổi vị trí cân bằng hóa học.",
+                    "Bị tiêu hao hoàn toàn sau phản ứng.",
+                    "Làm tăng tốc độ cả phản ứng thuận và nghịch như nhau, không đổi cân bằng.",
+                    "Làm thay đổi biến thiên enthalpy (Δr H)."
+                ],
+                correct: 2,
+                explanation: "Chính xác! Chất xúc tác làm tăng tốc cả 2 chiều như nhau, giúp đạt cân bằng nhanh hơn nhưng không đổi lượng cân bằng hay ΔH."
+            },
+            {
+                question: "Từ nguyên liệu C₂H₅OH, khi dùng xúc tác Al₂O₃ ở 350°C sẽ thu được sản phẩm chính nào?",
+                options: [
+                    "CH₃CHO (Acetaldehyde)",
+                    "(C₂H₅)₂O (Diethyl ether)",
+                    "CH₂=CH₂ (Ethylene)",
+                    "Buta-1,3-diene"
+                ],
+                correct: 2,
+                explanation: "Đúng! Al₂O₃ ở 350°C xúc tác phản ứng tách nước (dehydration) tạo ethylene (CH₂=CH₂)."
+            },
+            {
+                question: "Trong cơ chế phá hủy tầng ozone bởi hợp chất CFCs, gốc tự do chlorine (Cl) đóng vai trò là gì?",
+                options: [
+                    "Chất xúc tác",
+                    "Chất trung gian không tái sinh",
+                    "Sản phẩm cuối cùng",
+                    "Chất ức chế phản ứng"
+                ],
+                correct: 0,
+                explanation: "Chính xác! Gốc Cl tham gia phá hủy O₃ ở bước đầu và được tái tạo nguyên vẹn ở bước sau, đóng vai trò hoàn hảo của chất xúc tác."
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let answeredCurrent = false;
+
+        function loadQuizQuestion() {
+            answeredCurrent = false;
+            const q = quizData[currentQuizIndex];
+            document.getElementById('quiz-progress').innerText = `CÂU HỎI ${currentQuizIndex + 1} / ${quizData.length}`;
+            document.getElementById('quiz-score').innerText = `Điểm: ${quizScore}`;
+            document.getElementById('quiz-question').innerText = q.question;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-2xl glass-card border border-white/10 text-slate-200 text-sm hover:border-[#00F5D4] transition-all';
+                btn.innerHTML = `<span class="font-mono text-[#00F5D4] mr-2">${String.fromCharCode(65 + idx)}.</span> ${opt}`;
+                btn.onclick = () => selectQuizOption(idx);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+        }
+
+        function selectQuizOption(selectedIdx) {
+            if (answeredCurrent) return;
+            answeredCurrent = true;
+            
+            const q = quizData[currentQuizIndex];
+            const optionsContainer = document.getElementById('quiz-options');
+            const buttons = optionsContainer.children;
+            
+            if (selectedIdx === q.correct) {
+                buttons[selectedIdx].classList.add('bg-[#00F5D4]/20', 'border-[#00F5D4]', 'text-white');
+                quizScore += 20;
+                playSound('success');
+            } else {
+                buttons[selectedIdx].classList.add('bg-[#FF2A85]/20', 'border-[#FF2A85]', 'text-white');
+                buttons[q.correct].classList.add('bg-[#00F5D4]/20', 'border-[#00F5D4]', 'text-white');
+                playSound('error');
+            }
+
+            document.getElementById('quiz-score').innerText = `Điểm: ${quizScore}`;
+            const feedbackBox = document.getElementById('quiz-feedback');
+            feedbackBox.innerHTML = `<strong class="${selectedIdx === q.correct ? 'text-[#00F5D4]' : 'text-[#FF2A85]'}">${selectedIdx === q.correct ? 'Chính xác! 🎉' : 'Chưa chính xác! 💡'}</strong> ${q.explanation}`;
+            feedbackBox.classList.remove('hidden');
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            playSound('click');
+            currentQuizIndex++;
+            if (currentQuizIndex < quizData.length) {
+                loadQuizQuestion();
+            } else {
+                const quizWrapper = document.getElementById('quiz-wrapper');
+                quizWrapper.innerHTML = `
+                    <div class="text-center space-y-6 py-8">
+                        <div class="w-16 h-16 rounded-3xl bg-[#00F5D4]/10 border border-[#00F5D4]/30 flex items-center justify-center text-[#00F5D4] mx-auto">
+                            <i data-lucide="award" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold text-white">Hoàn thành thử thách Quiz!</h3>
+                        <p class="text-slate-300 text-lg">Tổng số điểm của bạn: <strong class="text-[#00F5D4] font-extrabold text-2xl">${quizScore} / 100</strong></p>
+                        <button onclick="resetQuiz(); loadQuizQuestion(); playSound('click');" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-[#00F5D4] to-[#FF2A85] text-slate-950 font-bold text-sm">
+                            Làm lại bài trắc nghiệm
+                        </button>
+                    </div>
+                `;
+                lucide.createIcons();
+            }
+        }
+
+        function resetQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            loadQuizQuestion();
+        }
+
+        // --- INITIALIZATION ON LOAD ---
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            initBgCanvas();
+            initCollisionLab();
+            loadQuizQuestion();
+
+            // Initial KaTeX render
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false}
+                ],
+                throwOnError: false
+            });
+
+            // Hide all slides except 1
+            document.querySelectorAll('.slide-container').forEach((el, idx) => {
+                if (idx !== 0) {
+                    el.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
