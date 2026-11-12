@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050814" />
+  <meta name="description" content="Cinematic Web Presentation — Nikola Tesla: cuộc đời, phát minh và di sản." />
+  <title>NIKOLA TESLA — The Electric Dream</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { ink: '#050814', plasma: '#7c3aed', arc: '#00f3ff', metal: '#f59e0b' },
+          fontFamily: { display: ['Orbitron', 'sans-serif'], body: ['Inter', 'sans-serif'] }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    :root{--ink:#050814;--arc:#00f3ff;--plasma:#7c3aed;--metal:#f59e0b;--muted:#9aabc2;--line:rgba(0,243,255,.22)}
+    *{box-sizing:border-box}
+    html,body{width:100%;height:100%;margin:0;background:var(--ink);color:#edf7ff;font-family:Inter,system-ui,sans-serif}
+    body{min-height:100svh;overscroll-behavior:none}
+    button{font:inherit}
+    #app{position:fixed;inset:0;isolation:isolate;background:radial-gradient(ellipse at 70% 46%,rgba(23,40,83,.30),transparent 55%),#050814}
+    #electric-bg{position:absolute;inset:0;width:100%;height:100%;z-index:-4;pointer-events:none}
+    .grid-film{position:absolute;inset:0;z-index:-3;pointer-events:none;background-image:linear-gradient(rgba(0,243,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,243,255,.035) 1px,transparent 1px);background-size:54px 54px;mask-image:linear-gradient(to bottom,transparent,black 18%,black 80%,transparent)}
+    .vignette{position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at center,transparent 35%,rgba(1,4,14,.72) 100%)}
+    .noise{position:absolute;inset:0;z-index:10;pointer-events:none;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E")}
+    .top-line{position:absolute;top:0;left:0;width:100%;height:2px;background:rgba(255,255,255,.08);z-index:20}
+    #progress{height:100%;width:14.2857%;background:linear-gradient(90deg,var(--plasma),var(--arc));box-shadow:0 0 10px var(--arc),0 0 25px rgba(0,243,255,.6);transform-origin:left center}
+    .topbar{position:absolute;z-index:15;left:clamp(18px,4vw,64px);right:clamp(18px,4vw,64px);top:clamp(18px,3vh,30px);display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+    .brand{font:600 11px Orbitron,sans-serif;letter-spacing:.25em;color:#d9faff;text-shadow:0 0 14px rgba(0,243,255,.4)}
+    .brand span{color:var(--arc)}
+    .top-meta{font:500 9px Orbitron,sans-serif;letter-spacing:.22em;color:#8294ad;text-align:right}
+    #stage{position:absolute;inset:0;perspective:1200px}
+    .slide{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(300px,.98fr);align-items:center;gap:clamp(20px,4vw,70px);padding:clamp(94px,12vh,130px) clamp(22px,7vw,110px) clamp(138px,18vh,174px);opacity:0;visibility:hidden;pointer-events:none;transform:scale(.985);transform-style:preserve-3d}
+    .slide.active{opacity:1;visibility:visible;pointer-events:auto}
+    .copy{position:relative;z-index:2;max-width:700px;transform-style:preserve-3d}
+    .eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:22px;color:var(--arc);font:600 10px Orbitron,sans-serif;letter-spacing:.24em;text-transform:uppercase}
+    .eyebrow:before{content:"";width:32px;height:1px;background:var(--arc);box-shadow:0 0 8px var(--arc)}
+    .headline{font:700 clamp(34px,5.4vw,76px)/1.07 Orbitron,sans-serif;letter-spacing:-.055em;margin:0 0 22px;color:#f5fbff;text-transform:uppercase;text-wrap:balance;text-shadow:0 0 22px rgba(0,243,255,.13)}
+    .headline .word{display:inline-block;white-space:pre;margin-right:.17em;will-change:transform,opacity,filter}
+    .headline .accent{color:var(--arc);text-shadow:0 0 10px rgba(0,243,255,.65),0 0 30px rgba(0,243,255,.25)}
+    .lead{max-width:610px;color:#b3c1d4;font-size:clamp(13px,1.14vw,16px);line-height:1.85;margin:0 0 25px}
+    .lead strong{color:#edfaff;font-weight:600}
+    .fact-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+    .fact{padding:9px 12px;border:1px solid rgba(0,243,255,.19);background:rgba(6,19,35,.52);color:#b9d2e5;border-radius:3px;font:500 9px Orbitron,sans-serif;letter-spacing:.1em;box-shadow:inset 0 0 16px rgba(0,243,255,.035)}
+    .fact b{color:var(--metal);font-weight:600}
+    .art-panel{position:relative;min-height:clamp(300px,47vw,520px);display:grid;place-items:center;transform-style:preserve-3d;will-change:transform}
+    .art-frame{position:absolute;inset:6% 2%;border:1px solid rgba(0,243,255,.13);background:linear-gradient(135deg,rgba(0,243,255,.045),rgba(124,58,237,.035) 55%,transparent);box-shadow:inset 0 0 50px rgba(0,243,255,.04),0 0 50px rgba(0,0,0,.22);transform:rotateY(-7deg) rotateX(2deg)}
+    .art-frame:before,.art-frame:after{content:"";position:absolute;width:24px;height:24px;border-color:var(--arc);opacity:.8}
+    .art-frame:before{top:-1px;left:-1px;border-top:1px solid;border-left:1px solid}
+    .art-frame:after{right:-1px;bottom:-1px;border-right:1px solid;border-bottom:1px solid}
+    .art-svg{position:relative;width:min(100%,620px);height:auto;max-height:490px;overflow:visible;filter:drop-shadow(0 0 18px rgba(0,243,255,.13));transform:translateZ(35px)}
+    .micro-label{position:absolute;bottom:4%;left:4%;font:500 8px Orbitron,sans-serif;letter-spacing:.2em;color:#71849e}
+    .micro-label span{color:var(--arc)}
+    .art-orbit{position:absolute;width:75%;aspect-ratio:1;border:1px solid rgba(0,243,255,.12);border-radius:50%;transform:rotateX(70deg);box-shadow:0 0 35px rgba(0,243,255,.06)}
+    .data-tag{position:absolute;right:2%;top:7%;font:500 8px Orbitron,sans-serif;letter-spacing:.18em;color:var(--metal);writing-mode:vertical-rl}
+    .bottom-hud{position:absolute;z-index:20;left:clamp(18px,4vw,64px);right:clamp(18px,4vw,64px);bottom:clamp(16px,3vh,28px);display:flex;align-items:flex-end;justify-content:space-between;gap:18px}
+    .counter{display:flex;align-items:baseline;gap:8px;font:500 11px Orbitron,sans-serif;letter-spacing:.14em;color:#d7e6f5;white-space:nowrap}
+    .counter strong{font-size:19px;color:var(--arc);text-shadow:0 0 12px rgba(0,243,255,.5)}
+    .counter small{font-size:9px;color:#71839a}
+    .controls{display:flex;align-items:center;gap:8px}
+    .hud-btn{position:relative;border:1px solid rgba(0,243,255,.32);background:linear-gradient(180deg,rgba(10,28,48,.95),rgba(4,12,25,.95));color:#dffaff;padding:11px 15px;min-width:72px;font:600 9px Orbitron,sans-serif;letter-spacing:.13em;text-transform:uppercase;cursor:pointer;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);box-shadow:inset 0 0 16px rgba(0,243,255,.05),0 0 14px rgba(0,243,255,.04);transition:background .2s,border-color .2s,color .2s}
+    .hud-btn:hover{border-color:var(--arc);background:rgba(0,243,255,.12);color:white;box-shadow:0 0 18px rgba(0,243,255,.22),inset 0 0 16px rgba(0,243,255,.1)}
+    .hud-btn:focus-visible,.note-toggle:focus-visible{outline:2px solid var(--metal);outline-offset:4px}
+    .hud-btn:disabled{opacity:.35;cursor:not-allowed}
+    .play-btn{display:flex;align-items:center;gap:8px;padding-right:12px}
+    .count-ring{width:20px;height:20px;transform:rotate(-90deg)}
+    .count-ring circle{fill:none;stroke:rgba(0,243,255,.18);stroke-width:2}
+    .count-ring .count-progress{stroke:var(--arc);stroke-linecap:round;stroke-dasharray:50.27;stroke-dashoffset:50.27;filter:drop-shadow(0 0 3px var(--arc))}
+    #speaker-box{position:absolute;z-index:18;left:50%;bottom:clamp(66px,10vh,102px);transform:translateX(-50%);width:min(740px,calc(100% - 36px));padding:14px 18px 13px;border:1px solid rgba(0,243,255,.2);background:linear-gradient(90deg,rgba(3,11,24,.88),rgba(8,17,36,.76),rgba(3,11,24,.88));box-shadow:0 0 32px rgba(0,0,0,.3),inset 0 0 22px rgba(0,243,255,.035);backdrop-filter:blur(12px);transition:opacity .25s,transform .25s}
+    #speaker-box.hidden-notes{opacity:0;pointer-events:none;transform:translate(-50%,12px)}
+    .speaker-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;color:var(--arc);font:600 8px Orbitron,sans-serif;letter-spacing:.22em}
+    #speaker-text{margin:0;color:#bdcada;font-size:11px;line-height:1.65;min-height:35px}
+    .note-toggle{position:absolute;z-index:21;right:clamp(18px,4vw,64px);bottom:clamp(66px,10vh,102px);transform:translateY(-100%);padding:6px 9px;border:1px solid rgba(0,243,255,.18);background:rgba(4,12,25,.76);color:#9fb4ca;font:600 8px Orbitron,sans-serif;letter-spacing:.15em;cursor:pointer}
+    .note-toggle:hover{color:var(--arc);border-color:var(--arc)}
+    #transition-flash{position:absolute;inset:0;z-index:30;pointer-events:none;opacity:0;background:linear-gradient(110deg,transparent 0%,rgba(0,243,255,.05) 42%,rgba(255,255,255,.9) 50%,rgba(124,58,237,.16) 53%,transparent 64%);transform:translateX(-120%) skewX(-14deg)}
+    .slide-kicker{color:var(--metal);font:500 9px Orbitron,sans-serif;letter-spacing:.18em;margin-bottom:12px}
+    .mini-rule{height:1px;width:72px;background:linear-gradient(90deg,var(--arc),transparent);margin:18px 0}
+    .quote-mark{font:700 90px/0.7 Georgia,serif;color:rgba(0,243,255,.28);height:48px}
+    .diagram-caption{font:500 8px Orbitron,sans-serif;letter-spacing:.16em;fill:#8ba1b8}
+    .svg-stroke{stroke:var(--arc);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .svg-dim{stroke:rgba(0,243,255,.28);stroke-width:1;fill:none}
+    .svg-gold{stroke:var(--metal);fill:none;stroke-width:1.6}
+    .gear{transform-box:fill-box;transform-origin:center}
+    .card-grid{position:relative;z-index:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:580px;transform:translateZ(30px)}
+    .invention-card{min-height:170px;padding:17px 17px 15px;border:1px solid rgba(0,243,255,.19);background:linear-gradient(145deg,rgba(18,40,63,.6),rgba(7,13,31,.72));backdrop-filter:blur(12px);box-shadow:inset 0 0 24px rgba(0,243,255,.04),0 15px 35px rgba(0,0,0,.2);position:relative;will-change:transform,opacity}
+    .invention-card:after{content:"";position:absolute;right:0;top:0;width:24px;height:24px;border-top:1px solid var(--arc);border-right:1px solid var(--arc);opacity:.65}
+    .card-icon{width:46px;height:42px;margin-bottom:10px;color:var(--arc)}
+    .invention-card h3{margin:0 0 6px;color:#eafaff;font:600 10px Orbitron,sans-serif;letter-spacing:.08em}
+    .invention-card p{margin:0;color:#93a9c0;font-size:10px;line-height:1.55}
+    .osc-wrap{width:100%;max-width:620px;padding:18px;border:1px solid rgba(0,243,255,.19);background:rgba(3,10,24,.68);box-shadow:inset 0 0 45px rgba(0,243,255,.04),0 0 40px rgba(0,0,0,.2);transform:translateZ(28px)}
+    .osc-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:12px;font:500 8px Orbitron,sans-serif;letter-spacing:.17em;color:#8299b4}
+    .osc-legend{display:flex;gap:14px}.legend-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;background:#ff784e;box-shadow:0 0 7px #ff784e}.legend-dot.ac{background:var(--arc);box-shadow:0 0 7px var(--arc)}
+    #oscilloscope{display:block;width:100%;height:250px}
+    .tower-waves{transform-box:fill-box;transform-origin:center;opacity:0}
+    .pigeon-wing{transform-box:fill-box;transform-origin:20% 70%}
+    .plasma-core{transform-box:fill-box;transform-origin:center}
+    .credit-line{opacity:0;transform:translateY(20px)}
+    .replay{display:inline-flex;align-items:center;gap:10px;margin-top:23px;padding:12px 18px;border:1px solid var(--arc);background:rgba(0,243,255,.08);color:#e6fdff;font:600 9px Orbitron,sans-serif;letter-spacing:.15em;cursor:pointer;box-shadow:0 0 22px rgba(0,243,255,.12)}
+    .replay:hover{background:rgba(0,243,255,.18);box-shadow:0 0 30px rgba(0,243,255,.3)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:900px){
+      .slide{grid-template-columns:minmax(0,1fr) minmax(260px,.85fr);gap:16px;padding-left:5vw;padding-right:5vw}
+      .headline{font-size:clamp(32px,5vw,58px)}
+      .art-panel{min-height:360px}
+      .lead{font-size:13px}
+      #speaker-box{width:min(680px,calc(100% - 32px))}
+    }
+    @media(max-width:680px){
+      .topbar{top:16px}.brand{font-size:9px}.top-meta{font-size:7px}
+      .slide{grid-template-columns:1fr;grid-template-rows:auto minmax(185px,34vh);gap:4px;align-content:center;padding:78px 22px 168px}
+      .copy{max-width:100%;align-self:end}.eyebrow{font-size:8px;margin-bottom:12px}.headline{font-size:clamp(29px,8.4vw,48px);margin-bottom:12px}.lead{font-size:11px;line-height:1.62;margin-bottom:12px}.fact-row{gap:6px;margin-top:12px}.fact{font-size:7px;padding:7px 8px}
+      .art-panel{min-height:190px;max-height:31vh}.art-frame{inset:4% 5%}.art-svg{max-height:240px;width:90%}.micro-label{font-size:6px;bottom:1%;left:7%}.data-tag{font-size:6px}
+      .card-grid{gap:7px;max-width:440px}.invention-card{min-height:112px;padding:9px}.card-icon{width:30px;height:27px;margin-bottom:5px}.invention-card h3{font-size:7px;margin-bottom:3px}.invention-card p{font-size:8px;line-height:1.35}
+      .osc-wrap{padding:10px}.osc-legend{gap:8px}.osc-head{font-size:6px}#oscilloscope{height:130px}
+      #speaker-box{bottom:72px;padding:9px 12px;width:calc(100% - 32px)}#speaker-text{font-size:9px;line-height:1.5;min-height:29px}.speaker-head{font-size:7px;margin-bottom:3px}
+      .note-toggle{bottom:72px;right:16px;font-size:7px;padding:5px 7px}
+      .bottom-hud{bottom:16px;left:16px;right:16px;align-items:center}.counter{font-size:8px}.counter strong{font-size:15px}.controls{gap:5px}.hud-btn{min-width:54px;padding:9px 10px;font-size:7px}.play-btn{gap:5px;padding-right:8px}.count-ring{width:16px;height:16px}
+      .quote-mark{font-size:55px;height:32px}.replay{margin-top:12px;padding:9px 12px;font-size:7px}
+    }
+    @media(max-height:650px) and (min-width:681px){.slide{padding-top:78px;padding-bottom:125px}.art-panel{min-height:290px}.art-svg{max-height:330px}.headline{font-size:clamp(31px,4vw,54px)}.lead{font-size:12px;line-height:1.6}.fact-row{margin-top:12px}.invention-card{min-height:140px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<div id="app">
+  <canvas id="electric-bg" aria-hidden="true"></canvas>
+  <div class="grid-film" aria-hidden="true"></div><div class="vignette" aria-hidden="true"></div><div class="noise" aria-hidden="true"></div>
+  <div class="top-line"><div id="progress"></div></div>
+  <header class="topbar"><div class="brand">FIELD NOTES <span>/</span> TESLA</div><div class="top-meta">A CINEMATIC BIOGRAPHY<br><span style="color:#00f3ff">1856 — 1943</span></div></header>
+  <main id="stage" aria-live="polite">
+    <!-- 01 / THE STORM -->
+    <section class="slide active" data-slide="0" aria-label="Slide 1: Đứa con của bão tố">
+      <div class="copy parallax">
+        <div class="eyebrow">01 / ORIGIN · SMILJAN</div>
+        <div class="slide-kicker">10 JULY 1856 — A STORMY NIGHT</div>
+        <h1 class="headline kinetic">NIKOLA <span class="accent">TESLA</span></h1>
+        <p class="lead">Đêm <strong>10 tháng 7 năm 1856</strong>, tại Smiljan, một cậu bé chào đời giữa cơn giông dữ dội. Từ ngôi làng nhỏ thuộc Đế quốc Áo khi ấy, Nikola Tesla sẽ theo đuổi những ý tưởng làm thay đổi cách thế giới tạo ra và truyền tải điện năng.</p>
+        <div class="quote-mark">“</div>
+        <p class="lead" style="margin-top:-4px;font-size:clamp(12px,1vw,14px)"><em>“Đứa trẻ của bóng tối…” — “Không, đứa trẻ của ánh sáng.”</em><br><span style="font-size:10px;color:#73859d">Giai thoại thường được kể lại về đêm ông sinh ra; không phải lời thoại lịch sử đã được xác minh.</span></p>
+        <div class="fact-row"><div class="fact"><b>1856</b> / BIRTH</div><div class="fact">SMILJAN · CROATIA TODAY</div></div>
+      </div>
+      <div class="art-panel parallax">
+        <div class="art-frame"></div><div class="art-orbit"></div>
+        <svg class="art-svg" viewBox="0 0 560 490" role="img" aria-label="Tia sét phân nhánh trên đường chân trời và chân dung cách điệu của Tesla">
+          <defs><radialGradient id="stormGlow"><stop stop-color="#00f3ff" stop-opacity=".28"/><stop offset="1" stop-color="#00f3ff" stop-opacity="0"/></radialGradient><linearGradient id="silhouette" x2="1" y2="1"><stop stop-color="#163a57"/><stop offset="1" stop-color="#070d1d"/></linearGradient></defs>
+          <ellipse cx="290" cy="255" rx="210" ry="210" fill="url(#stormGlow)"/>
+          <g class="storm-ring" fill="none" stroke="#00f3ff" opacity=".18"><ellipse cx="290" cy="255" rx="205" ry="75" transform="rotate(-24 290 255)"/><ellipse cx="290" cy="255" rx="205" ry="75" transform="rotate(35 290 255)"/></g>
+          <path d="M286 22 L246 117 L278 109 L220 224 L272 191 L246 283 L318 163 L282 174 L329 82 L296 94 Z" fill="#00f3ff" opacity=".9" filter="drop-shadow(0 0 12px #00f3ff)" class="hero-bolt"/>
+          <path d="M246 117 L190 164 L222 158 L164 224 M318 163 L373 201 L349 204 L399 250 M278 109 L332 45 L322 81 L365 58" fill="none" stroke="#7c3aed" stroke-width="2" opacity=".9" class="hero-branch"/>
+          <path d="M160 438 Q180 364 231 339 Q250 328 260 291 L256 255 Q238 238 240 209 Q235 181 260 171 Q278 127 330 148 Q367 160 365 209 Q369 243 341 260 L345 295 Q350 323 384 342 Q438 373 451 438Z" fill="url(#silhouette)" stroke="#00f3ff" stroke-opacity=".55" stroke-width="1.4"/>
+          <path d="M242 212 Q276 230 359 209 M255 275 Q290 295 344 274 M266 325 Q300 346 357 326" fill="none" stroke="#00f3ff" stroke-opacity=".25"/>
+          <path d="M273 215 Q286 207 299 215 M322 215 Q335 207 347 214 M302 228 L294 253 L310 253 M286 270 Q309 280 329 268" fill="none" stroke="#a9faff" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+          <path d="M267 235 Q298 249 333 235" fill="none" stroke="#d9fbff" stroke-width="4" opacity=".55"/>
+          <text x="27" y="458" class="diagram-caption">ATMOSPHERIC DISCHARGE / 01</text>
+          <text x="414" y="45" class="diagram-caption" fill="#f59e0b">1856</text>
+        </svg>
+        <div class="micro-label"><span>FIG 01</span> — THE FIRST LIGHT</div><div class="data-tag">SMILJAN / 44°33′N</div>
+      </div>
+    </section>
+
+    <!-- 02 / THE IMAGINATION ENGINE -->
+    <section class="slide" data-slide="1" aria-label="Slide 2: Bộ óc siêu phàm">
+      <div class="copy parallax">
+        <div class="eyebrow">02 / THE MIND · IMAGINATION</div>
+        <div class="slide-kicker">A LABORATORY INSIDE HIS MIND</div>
+        <h2 class="headline kinetic">THE <span class="accent">MIND</span><br>ENGINE</h2>
+        <p class="lead">Tesla kể rằng ông có thể hình dung một cỗ máy trong trí óc, quan sát nó vận hành và nhận ra những điểm cần sửa trước khi chế tạo. Ông gọi đó là khả năng hình dung sống động — một “phòng thí nghiệm” không cần giấy vẽ.</p>
+        <p class="lead">Từ những ý tưởng về động cơ và từ trường quay, ông theo đuổi một mục tiêu lớn: khai thác sức mạnh thiên nhiên — trong đó có dòng nước Niagara — để cung cấp điện cho con người.</p>
+        <div class="fact-row"><div class="fact"><b>1888</b> / AC INDUCTION MOTOR</div><div class="fact">IMAGINATION → ENGINEERING</div></div>
+      </div>
+      <div class="art-panel parallax">
+        <div class="art-frame"></div><div class="art-orbit"></div>
+        <svg class="art-svg" id="motor-svg" viewBox="0 0 560 480" role="img" aria-label="Bản vẽ kỹ thuật động cơ cảm ứng với các bánh răng và cuộn dây">
+          <defs><radialGradient id="motorCore"><stop stop-color="#00f3ff" stop-opacity=".32"/><stop offset="1" stop-color="#00f3ff" stop-opacity="0"/></radialGradient></defs>
+          <circle cx="280" cy="235" r="208" fill="url(#motorCore)"/>
+          <g class="blueprint-lines" stroke="#00f3ff" stroke-width="1" fill="none" opacity=".58"><circle cx="280" cy="235" r="170" stroke-dasharray="3 8"/><circle cx="280" cy="235" r="144"/><circle cx="280" cy="235" r="111" stroke-dasharray="2 7"/><path d="M280 34V436 M78 235H482 M137 92L423 378 M423 92L137 378" opacity=".35"/></g>
+          <g id="stator-coils" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"><path d="M280 84 C236 84 225 112 225 138 C225 157 241 166 257 166"/><path d="M280 84 C324 84 335 112 335 138 C335 157 319 166 303 166"/><path d="M280 386 C236 386 225 358 225 332 C225 313 241 304 257 304"/><path d="M280 386 C324 386 335 358 335 332 C335 313 319 304 303 304"/></g>
+          <g class="gear gear-a" fill="none" stroke="#00f3ff" stroke-width="2.5"><circle cx="280" cy="235" r="82"/><circle cx="280" cy="235" r="68" stroke-dasharray="7 8"/><path d="M280 145V173 M280 297V325 M190 235H218 M342 235H370 M216 171L236 191 M324 279L344 299 M344 171L324 191 M236 279L216 299"/></g>
+          <g class="gear gear-b" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="280" cy="235" r="49"/><path d="M280 180V194 M280 276V290 M225 235H239 M321 235H335 M241 196L251 206 M309 264L319 274 M319 196L309 206 M251 264L241 274"/></g>
+          <circle cx="280" cy="235" r="23" fill="#06172a" stroke="#00f3ff" stroke-width="2"/><circle cx="280" cy="235" r="8" fill="#00f3ff" filter="drop-shadow(0 0 8px #00f3ff)"/>
+          <g class="svg-dim"><path d="M280 32V57 M280 413V438 M66 235H91 M469 235H494"/><path d="M100 410L127 383 M433 87L460 60"/></g>
+          <g fill="#8ca5bd" font-family="Orbitron" font-size="9" letter-spacing="1.5"><text x="27" y="35">ROTOR / STATOR</text><text x="388" y="438">ROTATING FIELD</text><text x="27" y="455" fill="#f59e0b">PATENT ERA · 1888</text></g>
+          <path class="draw-path svg-stroke" d="M280 84 C236 84 225 112 225 138 C225 157 241 166 257 166 M280 386 C324 386 335 358 335 332 C335 313 319 304 303 304"/>
+        </svg>
+        <div class="micro-label"><span>FIG 02</span> — ROTATING MAGNETIC FIELD</div><div class="data-tag">ENGINE / 1888</div>
+      </div>
+    </section>
+
+    <!-- 03 / WAR OF CURRENTS -->
+    <section class="slide" data-slide="2" aria-label="Slide 3: Cuộc chiến dòng điện">
+      <div class="copy parallax">
+        <div class="eyebrow">03 / THE CURRENT WAR</div>
+        <div class="slide-kicker">TWO SYSTEMS. ONE ELECTRIFIED WORLD.</div>
+        <h2 class="headline kinetic">AC <span class="accent">VS</span> DC</h2>
+        <p class="lead">Trong thập niên 1880, dòng điện một chiều (DC) gắn với Thomas Edison cạnh tranh quyết liệt với hệ thống dòng điện xoay chiều (AC) đa pha mà Tesla phát triển và George Westinghouse thương mại hóa.</p>
+        <p class="lead">Năm <strong>1893</strong>, hệ thống AC thắp sáng Hội chợ Thế giới tại Chicago — một màn trình diễn quy mô lớn cho tiềm năng truyền tải điện. Cuộc cạnh tranh ấy góp phần định hình lưới điện hiện đại.</p>
+        <div class="fact-row"><div class="fact"><b>1884</b> / TESLA ARRIVES IN NEW YORK</div><div class="fact"><b>1893</b> / CHICAGO WORLD'S FAIR</div></div>
+      </div>
+      <div class="art-panel parallax">
+        <div class="art-frame"></div>
+        <div class="osc-wrap">
+          <div class="osc-head"><span>LIVE SIGNAL ANALYSIS / 60 HZ CONCEPT</span><span>DUAL TRACE</span></div>
+          <div class="osc-head"><div class="osc-legend"><span><i class="legend-dot"></i>DC — DIRECT</span><span><i class="legend-dot ac"></i>AC — ALTERNATING</span></div><span>VOLTS / TIME</span></div>
+          <canvas id="oscilloscope" width="900" height="420" aria-label="Đồ thị so sánh đường DC và sóng sin AC"></canvas>
+          <div style="display:flex;justify-content:space-between;margin-top:10px;color:#647b96;font:500 7px Orbitron;letter-spacing:.16em"><span>STEADY POTENTIAL</span><span>ROTATING FIELD</span><span>1893 / CHICAGO</span></div>
+        </div>
+        <div class="micro-label"><span>FIG 03</span> — THE WAR OF CURRENTS</div>
+      </div>
+    </section>
+
+    <!-- 04 / WIRELESS DREAM -->
+    <section class="slide" data-slide="3" aria-label="Slide 4: Cuộn dây Tesla và năng lượng không dây">
+      <div class="copy parallax">
+        <div class="eyebrow">04 / WIRELESS WORLD</div>
+        <div class="slide-kicker">ENERGY BEYOND THE CABLE</div>
+        <h2 class="headline kinetic">THE <span class="accent">WIRELESS</span><br>DREAM</h2>
+        <p class="lead">Năm <strong>1891</strong>, Tesla giới thiệu cuộn dây mang tên mình — thiết bị tạo ra điện áp cao, tần số cao. Tại Colorado Springs (1899–1900), ông tiếp tục nghiên cứu các hiện tượng điện và truyền tín hiệu không dây.</p>
+        <p class="lead">Tháp Wardenclyffe trên Long Island là nỗ lực đầy tham vọng nhằm truyền thông tin và năng lượng không dây. Dự án không hoàn thành, nhưng khát vọng kết nối thế giới của Tesla vẫn trở thành một biểu tượng mạnh mẽ.</p>
+        <div class="fact-row"><div class="fact"><b>1891</b> / TESLA COIL</div><div class="fact"><b>1901</b> / WARDENCLYFFE PROJECT</div></div>
+      </div>
+      <div class="art-panel parallax">
+        <div class="art-frame"></div><div class="art-orbit"></div>
+        <svg class="art-svg" id="tower-svg" viewBox="0 0 560 500" role="img" aria-label="Tháp Wardenclyffe với các vòng sóng điện từ">
+          <defs><linearGradient id="tower-metal" x2="1" y2="0"><stop stop-color="#132b45"/><stop offset=".5" stop-color="#76ddeb"/><stop offset="1" stop-color="#142542"/></linearGradient><radialGradient id="tower-aura"><stop stop-color="#00f3ff" stop-opacity=".23"/><stop offset="1" stop-color="#00f3ff" stop-opacity="0"/></radialGradient></defs>
+          <ellipse cx="280" cy="220" rx="240" ry="220" fill="url(#tower-aura)"/>
+          <g class="tower-waves" fill="none" stroke="#00f3ff" stroke-width="1.6"><circle cx="280" cy="150" r="85"/><circle cx="280" cy="150" r="125"/><circle cx="280" cy="150" r="170"/><circle cx="280" cy="150" r="212"/></g>
+          <g class="tower-arcs" fill="none" stroke="#7c3aed" stroke-width="2.2" stroke-linecap="round"><path d="M280 67L254 26L267 46L239 9"/><path d="M280 67L309 24L296 45L328 14"/><path d="M280 67L348 48L322 55L372 37"/><path d="M280 67L210 45L237 53L188 28"/></g>
+          <path d="M280 75L217 415H343Z" fill="url(#tower-metal)" fill-opacity=".24" stroke="#00f3ff" stroke-width="2"/>
+          <path d="M280 75V415 M217 415L280 75L343 415 M235 318H325 M247 255H313 M258 192H302 M268 130H292" fill="none" stroke="#8befff" stroke-width="1.5" opacity=".8"/>
+          <path d="M204 415H356L374 433H186Z" fill="#0b1c31" stroke="#00f3ff" stroke-opacity=".7"/>
+          <g fill="none" stroke="#f59e0b" stroke-width="2"><ellipse cx="280" cy="74" rx="38" ry="11"/><path d="M242 74V55Q280 24 318 55V74"/></g>
+          <g fill="#7c3aed" opacity=".75"><circle cx="280" cy="60" r="5"/><circle cx="242" cy="75" r="3"/><circle cx="318" cy="75" r="3"/></g>
+          <path d="M217 415L190 450H370L343 415" fill="none" stroke="#00f3ff" stroke-opacity=".45"/>
+          <g fill="#8ca5bd" font-family="Orbitron" font-size="8" letter-spacing="1.2"><text x="25" y="465">WARDENCLYFFE TOWER / 1901</text><text x="390" y="90">LONG ISLAND</text></g>
+        </svg>
+        <div class="micro-label"><span>FIG 04</span> — WIRELESS TRANSMISSION EXPERIMENT</div><div class="data-tag">COLORADO SPRINGS / 1899–1900</div>
+      </div>
+    </section>
+
+    <!-- 05 / INVENTIONS -->
+    <section class="slide" data-slide="4" aria-label="Slide 5: Những phát minh đi trước thời đại">
+      <div class="copy parallax">
+        <div class="eyebrow">05 / INVENTION ARCHIVE</div>
+        <div class="slide-kicker">IDEAS THAT OUTRAN THEIR ERA</div>
+        <h2 class="headline kinetic">BEYOND<br><span class="accent">THE VISIBLE</span></h2>
+        <p class="lead">Tesla không chỉ gắn với hệ thống điện xoay chiều. Ông còn thử nghiệm điều khiển từ xa bằng vô tuyến, nghiên cứu chiếu sáng, tia X và phát triển nhiều thiết kế động cơ — những mảnh ghép cho trí tưởng tượng công nghệ của thế kỷ sau.</p>
+        <p class="lead">Không phải mọi thử nghiệm đều trở thành sản phẩm thương mại, nhưng chúng cho thấy phạm vi tò mò khoa học rộng lớn của ông.</p>
+        <div class="fact-row"><div class="fact"><b>1898</b> / RADIO CONTROL</div><div class="fact">EXPERIMENT · PATENT · PROTOTYPE</div></div>
+      </div>
+      <div class="art-panel parallax">
+        <div class="art-frame"></div>
+        <div class="card-grid">
+          <article class="invention-card"><svg class="card-icon boat-icon" viewBox="0 0 64 52" aria-hidden="true"><path d="M7 34H56L47 45H18Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M23 32V10H41V32M28 10V5H37V10M13 49Q19 45 25 49T37 49T50 49" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M47 9L52 5M51 15L58 15M45 19L51 23" stroke="#f59e0b" stroke-width="1.5"/></svg><h3>RADIO CONTROL</h3><p>Chiếc thuyền điều khiển vô tuyến trình diễn năm 1898.</p></article>
+          <article class="invention-card"><svg class="card-icon lamp-icon" viewBox="0 0 64 52" aria-hidden="true"><path d="M23 37Q12 28 15 17Q18 5 32 5Q46 5 49 17Q52 28 41 37L39 43H25Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M25 43H39M26 48H38M32 11V31M25 17L39 25M39 17L25 25" stroke="#f59e0b" stroke-width="1.5"/><path d="M7 16L2 12M57 16L62 12M32 0V-4" stroke="currentColor" stroke-width="1.5"/></svg><h3>LIGHTING</h3><p>Thử nghiệm với đèn phóng điện và chiếu sáng tần số cao.</p></article>
+          <article class="invention-card"><svg class="card-icon xray-icon" viewBox="0 0 64 52" aria-hidden="true"><path d="M10 10L26 26L10 42M26 10L10 26L26 42M39 9L54 43M54 9L39 43" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="32" cy="26" r="7" fill="none" stroke="#f59e0b" stroke-width="1.5"/><path d="M32 2V10M32 42V50M4 26H12M52 26H60" stroke="currentColor" stroke-width="1.5"/></svg><h3>X-RAY RESEARCH</h3><p>Những thí nghiệm hình ảnh tia X tiên phong vào thập niên 1890.</p></article>
+          <article class="invention-card"><svg class="card-icon motor-icon" viewBox="0 0 64 52" aria-hidden="true"><circle cx="32" cy="26" r="20" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="32" cy="26" r="8" fill="none" stroke="#f59e0b" stroke-width="1.8"/><path d="M32 6V18M32 34V46M12 26H24M40 26H52M18 12L25 19M39 33L46 40M46 12L39 19M25 33L18 40" stroke="currentColor" stroke-width="1.5"/></svg><h3>INDUCTION MOTOR</h3><p>Động cơ cảm ứng và từ trường quay — dấu ấn kỹ thuật cốt lõi.</p></article>
+        </div>
+        <div class="micro-label"><span>FIG 05</span> — SELECTED EXPERIMENTS & INVENTIONS</div>
+      </div>
+    </section>
+
+    <!-- 06 / THE QUIET ROOM -->
+    <section class="slide" data-slide="5" aria-label="Slide 6: Những năm tháng cô độc">
+      <div class="copy parallax">
+        <div class="eyebrow">06 / THE QUIET YEARS</div>
+        <div class="slide-kicker">NEW YORK · ROOM 3327</div>
+        <h2 class="headline kinetic">THE <span class="accent">LONELY</span><br>GENIUS</h2>
+        <p class="lead">Những năm cuối đời, Tesla sống lặng lẽ tại khách sạn New Yorker, trong căn phòng thường được nhắc đến với số <strong>3327</strong>. Nguồn lực tài chính cạn dần, nhiều dự án dang dở; ông dành sự quan tâm đặc biệt cho những chú chim bồ câu thường ghé thăm.</p>
+        <p class="lead">Nikola Tesla qua đời ngày <strong>7 tháng 1 năm 1943</strong>, tại New York. Sự nghiệp của ông để lại hàng trăm bằng sáng chế và một di sản khoa học vượt xa những thành công thương mại của chính ông.</p>
+        <div class="fact-row"><div class="fact"><b>07 JAN 1943</b> / NEW YORK</div><div class="fact">AGE 86 · A LASTING LEGACY</div></div>
+      </div>
+      <div class="art-panel parallax">
+        <div class="art-frame"></div>
+        <svg class="art-svg" viewBox="0 0 560 470" role="img" aria-label="Khung cửa sổ khách sạn New Yorker nhìn ra thành phố đêm và chim bồ câu trắng">
+          <defs><linearGradient id="night" x2="0" y2="1"><stop stop-color="#101e39"/><stop offset="1" stop-color="#050a18"/></linearGradient><linearGradient id="window-glow" x2="1"><stop stop-color="#f59e0b" stop-opacity=".1"/><stop offset=".5" stop-color="#00f3ff" stop-opacity=".12"/><stop offset="1" stop-color="#7c3aed" stop-opacity=".12"/></linearGradient></defs>
+          <rect x="72" y="32" width="416" height="380" fill="url(#night)" stroke="#7294b5" stroke-opacity=".55" stroke-width="5"/>
+          <rect x="84" y="44" width="392" height="356" fill="url(#window-glow)" stroke="#00f3ff" stroke-opacity=".26"/>
+          <g fill="#071326" stroke="#1c4360" stroke-width="1"><path d="M84 330L84 218L126 218V330ZM131 330V162H174V330ZM180 330V235H214V330ZM220 330V128H264V330ZM271 330V194H310V330ZM316 330V150H358V330ZM364 330V224H402V330ZM408 330V175H476V330Z"/></g>
+          <g fill="#f59e0b" opacity=".8"><path d="M95 234h7v10h-7zM110 234h7v10h-7zM141 180h7v10h-7zM157 180h7v10h-7zM229 148h7v10h-7zM245 148h7v10h-7zM279 211h7v10h-7zM327 168h7v10h-7zM345 168h7v10h-7zM421 194h7v10h-7zM446 194h7v10h-7z"/></g>
+          <path d="M280 44V400M84 400H476" stroke="#9ab5ca" stroke-width="5" opacity=".65"/>
+          <path d="M74 413H486" stroke="#00f3ff" stroke-opacity=".4" stroke-width="2"/>
+          <g class="pigeon" transform="translate(310 292)"><path d="M-48 8Q-34 -23 -3 -18Q17 -35 35 -14Q49 -4 42 14Q22 32 -8 22Q-29 28 -48 8Z" fill="#e9f4f7" stroke="#9fb9c6" stroke-width="1.3"/><path class="pigeon-wing" d="M-31 4Q-14 -24 17 -11Q8 7 -15 15Z" fill="#b8d0d8" stroke="#8baebc"/><path d="M33 -12L54 -4L36 1Z" fill="#f59e0b"/><circle cx="29" cy="-12" r="2" fill="#06101f"/><path d="M-45 7L-61 -4L-55 13Z" fill="#d9e7eb"/><path d="M-5 23L-8 37M10 23L13 37" stroke="#f59e0b" stroke-width="1.5"/></g>
+          <g fill="#00f3ff" opacity=".5"><circle cx="112" cy="91" r="1.5"/><circle cx="431" cy="105" r="1"/><circle cx="390" cy="70" r="1.4"/><circle cx="183" cy="65" r="1"/></g>
+          <text x="94" y="430" class="diagram-caption">HOTEL NEW YORKER / ROOM 3327</text>
+          <text x="406" y="455" class="diagram-caption" fill="#f59e0b">1943</text>
+        </svg>
+        <div class="micro-label"><span>FIG 06</span> — THE FINAL CHAPTER</div><div class="data-tag">NEW YORK / 1943</div>
+      </div>
+    </section>
+
+    <!-- 07 / LEGACY -->
+    <section class="slide" data-slide="6" aria-label="Slide 7: Di sản bất tử">
+      <div class="copy parallax">
+        <div class="eyebrow">07 / THE LEGACY ·  FUTURE</div>
+        <div class="slide-kicker">THE LIGHT DOES NOT END</div>
+        <h2 class="headline kinetic">A <span class="accent">FUTURE</span><br>UNWIRED</h2>
+        <div class="mini-rule"></div>
+        <p class="lead credit-line" style="font-size:clamp(17px,2vw,25px);line-height:1.55;color:#e9faff;font-weight:500">“Hiện tại là của họ; nhưng tương lai, thứ mà tôi đã thực sự làm việc vì nó, là của tôi.”</p>
+        <p class="lead credit-line" style="font-size:10px;color:#8298b1;letter-spacing:.12em">— NIKOLA TESLA · LỜI TRÍCH DẪN THƯỜNG ĐƯỢC GÁN CHO ÔNG</p>
+        <button class="replay" id="replay-btn" type="button"><span>↺</span> XEM LẠI TỪ ĐẦU / REPLAY</button>
+      </div>
+      <div class="art-panel parallax">
+        <div class="art-frame"></div>
+        <svg class="art-svg" id="plasma-svg" viewBox="0 0 560 500" role="img" aria-label="Quả cầu plasma phát sáng với các tia điện chạy quanh">
+          <defs><radialGradient id="plasma-ball"><stop stop-color="#eaffff"/><stop offset=".12" stop-color="#9cfaff"/><stop offset=".38" stop-color="#00a9d8" stop-opacity=".92"/><stop offset=".7" stop-color="#4c25a6" stop-opacity=".65"/><stop offset="1" stop-color="#050814" stop-opacity="0"/></radialGradient><filter id="plasma-blur"><feGaussianBlur stdDeviation="13"/></filter></defs>
+          <circle cx="280" cy="235" r="185" fill="#00f3ff" opacity=".12" filter="url(#plasma-blur)"/>
+          <g class="plasma-rings" fill="none" stroke="#00f3ff" stroke-width="1.1" opacity=".4"><ellipse cx="280" cy="235" rx="218" ry="83" transform="rotate(-25 280 235)"/><ellipse cx="280" cy="235" rx="218" ry="83" transform="rotate(36 280 235)"/><ellipse cx="280" cy="235" rx="160" ry="210" transform="rotate(20 280 235)"/></g>
+          <circle class="plasma-core" cx="280" cy="235" r="140" fill="url(#plasma-ball)" stroke="#a9ffff" stroke-opacity=".65" stroke-width="1.6"/>
+          <g class="plasma-veins" fill="none" stroke="#d9ffff" stroke-linecap="round" stroke-width="2.5" filter="drop-shadow(0 0 5px #00f3ff)"><path d="M280 235L250 188L264 161L239 128L248 93"/><path d="M280 235L320 198L305 167L338 138L344 103"/><path d="M280 235L232 255L204 238L172 257L144 245"/><path d="M280 235L324 259L349 241L389 270L417 267"/><path d="M280 235L270 282L292 309L274 345L282 370"/><path d="M280 235L296 211L285 184L304 161"/></g>
+          <circle cx="280" cy="235" r="8" fill="#fff" filter="drop-shadow(0 0 12px #00f3ff)"/>
+          <text x="25" y="465" class="diagram-caption">ENERGY / CURIOSITY / POSSIBILITY</text>
+        </svg>
+        <div class="micro-label"><span>FIG 07</span> — AN IDEA THAT KEEPS GLOWING</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="transition-flash" aria-hidden="true"></div>
+  <button class="note-toggle" id="notes-toggle" type="button" aria-pressed="true">SUBTITLES / ON</button>
+  <aside id="speaker-box" aria-label="Lời dẫn thuyết trình"><div class="speaker-head"><span>◉ SPEAKER NOTES / VOICE OVER</span><span id="note-index">01 — 07</span></div><p id="speaker-text">Một đêm giông bão ở Smiljan, Nikola Tesla chào đời. Từ khởi đầu bình dị ấy, ông sẽ theo đuổi những ý tưởng về điện năng làm thay đổi thế giới.</p></aside>
+  <nav class="bottom-hud" aria-label="Điều khiển trình chiếu"><div class="counter"><strong id="current-number">01</strong><small>/ 07</small></div><div class="controls"><button class="hud-btn" id="prev-btn" type="button" aria-label="Slide trước">← Prev</button><button class="hud-btn" id="next-btn" type="button" aria-label="Slide tiếp theo">Next →</button><button class="hud-btn play-btn" id="autoplay-btn" type="button" aria-pressed="false"><svg class="count-ring" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8"/><circle class="count-progress" id="count-progress" cx="10" cy="10" r="8"/></svg><span id="autoplay-label">AUTO / OFF</span></button></div></nav>
+</div>
+<script>
+(() => {
+  'use strict';
+  const slides = [...document.querySelectorAll('.slide')];
+  const total = slides.length;
+  const progress = document.getElementById('progress');
+  const currentNumber = document.getElementById('current-number');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const autoplayBtn = document.getElementById('autoplay-btn');
+  const autoplayLabel = document.getElementById('autoplay-label');
+  const countProgress = document.getElementById('count-progress');
+  const notesToggle = document.getElementById('notes-toggle');
+  const speakerBox = document.getElementById('speaker-box');
+  const speakerText = document.getElementById('speaker-text');
+  const noteIndex = document.getElementById('note-index');
+  const transitionFlash = document.getElementById('transition-flash');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const notes = [
+    'Ngày 10 tháng 7 năm 1856, Nikola Tesla sinh tại Smiljan, khi vùng đất này còn thuộc Đế quốc Áo. Câu chuyện bà đỡ gọi ông là “đứa trẻ của bóng tối” và mẹ ông đáp lại bằng “đứa trẻ của ánh sáng” là một giai thoại nổi tiếng, nhưng không có bằng chứng đủ chắc để xem đó là lời thoại lịch sử nguyên văn.',
+    'Tesla có khả năng hình dung các thiết bị rất sống động. Trong hồi ức, ông mô tả việc thử nghiệm và điều chỉnh máy móc trong trí óc trước khi chế tạo. Ý tưởng về từ trường quay đã dẫn tới động cơ cảm ứng đa pha, được cấp bằng sáng chế vào cuối thập niên 1880.',
+    'Tesla đến New York năm 1884 và từng làm việc trong một tổ chức của Edison. Cuộc cạnh tranh giữa dòng điện một chiều và xoay chiều tăng tốc trong thập niên 1880. Tesla hợp tác với George Westinghouse; tại Hội chợ Thế giới Chicago năm 1893, hệ thống AC đã chứng minh khả năng thắp sáng quy mô lớn.',
+    'Cuộn dây Tesla được giới thiệu năm 1891. Tại Colorado Springs giai đoạn 1899 đến 1900, ông thực hiện nhiều thí nghiệm điện cao tần. Sau đó, dự án Wardenclyffe được khởi động với tham vọng truyền thông tin và năng lượng không dây; tuy nhiên công trình không bao giờ trở thành mạng truyền tải toàn cầu như ông hình dung.',
+    'Năm 1898, Tesla trình diễn một chiếc thuyền điều khiển bằng sóng vô tuyến. Ông cũng nghiên cứu ánh sáng phóng điện và tiến hành các thí nghiệm ban đầu với tia X. Cần phân biệt: Tesla không phải người duy nhất hay người đầu tiên phát minh ra tất cả các công nghệ này; đóng góp của ông nằm ở những thử nghiệm và cải tiến cụ thể trong một thời kỳ khoa học phát triển nhanh.',
+    'Những năm cuối đời, Tesla sống tại khách sạn New Yorker và thường được nhắc tới với căn phòng 3327. Ông qua đời ngày 7 tháng 1 năm 1943, ở tuổi 86. Số lượng bằng sáng chế của ông được ghi nhận ở nhiều quốc gia và thường được mô tả là hàng trăm, tùy cách thống kê.',
+    'Di sản của Tesla không chỉ nằm ở một phát minh riêng lẻ. Hệ thống điện xoay chiều, động cơ cảm ứng và tinh thần thử nghiệm đã góp phần định hình thế giới hiện đại. Câu trích dẫn về hiện tại và tương lai thường được gán cho ông; phần kết này là lời mời nhìn tiếp về phía trước.'
+  ];
+  let index = 0;
+  let transitioning = false;
+  let autoplay = false;
+  let autoplayTween = null;
+  let noteVisible = true;
+  const CIRC = 2 * Math.PI * 8;
+  countProgress.style.strokeDasharray = CIRC;
+  countProgress.style.strokeDashoffset = CIRC;
+
+  // Split titles into animated word spans while preserving accent spans.
+  slides.forEach(slide => {
+    const title = slide.querySelector('.kinetic');
+    if (!title) return;
+    [...title.childNodes].forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent;
+        const parts = text.split(/(\s+)/);
+        const fragment = document.createDocumentFragment();
+        parts.forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) fragment.append(document.createTextNode(part));
+          else { const span = document.createElement('span'); span.className = 'word'; span.textContent = part; fragment.append(span); }
+        });
+        node.replaceWith(fragment);
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const original = node.textContent;
+        node.textContent = '';
+        original.split(/(\s+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) node.append(document.createTextNode(part));
+          else { const span = document.createElement('span'); span.className = 'word'; span.textContent = part; node.append(span); }
+        });
+      }
+    });
+  });
+
+  function setInitial(slide) {
+    const words = slide.querySelectorAll('.word');
+    gsap.set(words, {y: reducedMotion ? 0 : 34, opacity: 0, rotateX: reducedMotion ? 0 : -55, filter: reducedMotion ? 'blur(0px)' : 'blur(9px)', transformOrigin: '50% 100%'});
+    gsap.set(slide.querySelectorAll('.eyebrow,.slide-kicker,.lead,.fact,.quote-mark,.art-frame,.art-orbit,.art-svg,.osc-wrap,.invention-card,.micro-label,.data-tag,.replay'), {y: reducedMotion ? 0 : 20, opacity: 0});
+  }
+  slides.forEach(setInitial);
+
+  function animateDrawings(slide) {
+    gsap.killTweensOf(slide.querySelectorAll('.headline,.gear-a,.gear-b,#stator-coils path,.tower-waves circle,.tower-arcs,.boat-icon,.lamp-icon,.xray-icon,.motor-icon,.pigeon-wing,.pigeon,.plasma-core,.plasma-rings,.plasma-veins'));
+    if (slide.dataset.slide === '0') {
+      gsap.to(slide.querySelector('.headline'),{x:2,skewX:1,textShadow:'2px 0 #7c3aed, -2px 0 #00f3ff, 0 0 28px rgba(0,243,255,.45)',duration:.055,repeat:7,yoyo:true,ease:'none',onComplete:()=>gsap.set(slide.querySelector('.headline'),{clearProps:'x,skewX,textShadow'})});
+    }
+    if (slide.dataset.slide === '1') {
+      const paths = slide.querySelectorAll('.draw-path, .blueprint-lines path, .svg-dim path');
+      paths.forEach(path => {
+        try { const length = path.getTotalLength(); gsap.set(path,{strokeDasharray:length,strokeDashoffset:length}); gsap.to(path,{strokeDashoffset:0,duration:1.7,ease:'power2.out',stagger:.02}); } catch(e) {}
+      });
+      gsap.to(slide.querySelector('.gear-a'),{rotation:360,duration:16,repeat:-1,ease:'none',transformOrigin:'50% 50%'});
+      gsap.to(slide.querySelector('.gear-b'),{rotation:-360,duration:11,repeat:-1,ease:'none',transformOrigin:'50% 50%'});
+      gsap.fromTo(slide.querySelectorAll('#stator-coils path'),{opacity:.2},{opacity:1,duration:.7,repeat:3,yoyo:true,stagger:.12});
+    }
+    if (slide.dataset.slide === '3') {
+      gsap.killTweensOf(slide.querySelectorAll('.tower-waves circle'));
+      gsap.set(slide.querySelectorAll('.tower-waves circle'),{attr:{r:35},opacity:0});
+      slide.querySelectorAll('.tower-waves circle').forEach((ring,i)=>gsap.fromTo(ring,{attr:{r:35},opacity:.62},{attr:{r:205},opacity:0,duration:3.1,delay:i*.55,repeat:-1,ease:'power1.out'}));
+      gsap.fromTo(slide.querySelector('.tower-arcs'),{opacity:.2,scale:.96,transformOrigin:'50% 50%'},{opacity:1,scale:1.04,duration:.65,repeat:-1,yoyo:true,ease:'sine.inOut'});
+    }
+    if (slide.dataset.slide === '4') {
+      gsap.to(slide.querySelectorAll('.boat-icon'),{y:-3,duration:1.1,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      gsap.to(slide.querySelectorAll('.lamp-icon'),{filter:'drop-shadow(0 0 9px #f59e0b)',opacity:.7,duration:.75,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      gsap.to(slide.querySelectorAll('.xray-icon'),{rotation:3,duration:1.8,repeat:-1,yoyo:true,transformOrigin:'50% 50%',ease:'sine.inOut'});
+      gsap.to(slide.querySelectorAll('.motor-icon'),{rotation:360,duration:8,repeat:-1,ease:'none',transformOrigin:'50% 50%'});
+    }
+    if (slide.dataset.slide === '5') {
+      gsap.to(slide.querySelector('.pigeon-wing'),{rotation:-18,duration:.55,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      gsap.to(slide.querySelector('.pigeon'),{y:-4,duration:2.4,repeat:-1,yoyo:true,ease:'sine.inOut'});
+    }
+    if (slide.dataset.slide === '6') {
+      gsap.to(slide.querySelector('.plasma-core'),{scale:1.045,duration:1.7,repeat:-1,yoyo:true,ease:'sine.inOut'});
+      gsap.to(slide.querySelector('.plasma-rings'),{rotation:360,duration:28,repeat:-1,ease:'none',transformOrigin:'50% 50%'});
+      gsap.to(slide.querySelector('.plasma-veins'),{opacity:.5,duration:.8,repeat:-1,yoyo:true,ease:'sine.inOut'});
+    }
+  }
+
+  function enterSlide(i) {
+    const slide = slides[i];
+    slides.forEach((s,n)=>{s.classList.toggle('active',n===i);gsap.set(s,{clearProps:'transform,filter,opacity'});});
+    currentNumber.textContent = String(i+1).padStart(2,'0');
+    progress.style.width = `${((i+1)/total)*100}%`;
+    prevBtn.disabled = i===0;
+    nextBtn.textContent = i===total-1 ? 'End ◇' : 'Next →';
+    speakerText.textContent = notes[i];
+    noteIndex.textContent = `${String(i+1).padStart(2,'0')} — 07`;
+    document.body.dataset.scene = String(i);
+    const words = slide.querySelectorAll('.word');
+    const tl = gsap.timeline({defaults:{ease:'power3.out'}});
+    if (!reducedMotion) {
+      tl.fromTo(words,{y:42,opacity:0,rotateX:-55,filter:'blur(9px)'},{y:0,opacity:1,rotateX:0,filter:'blur(0px)',duration:.88,stagger:.075},.08);
+    } else tl.to(words,{opacity:1,duration:.15},0);
+    tl.fromTo(slide.querySelector('.eyebrow'),{x:-22,opacity:0},{x:0,opacity:1,duration:.55},.12)
+      .fromTo(slide.querySelector('.slide-kicker'),{y:12,opacity:0},{y:0,opacity:1,duration:.45},.22)
+      .fromTo(slide.querySelectorAll('.lead'),{y:18,opacity:0},{y:0,opacity:1,duration:.6,stagger:.12},.35)
+      .fromTo(slide.querySelectorAll('.quote-mark'),{y:8,opacity:0},{y:0,opacity:1,duration:.45},.48)
+      .fromTo(slide.querySelectorAll('.fact'),{y:12,opacity:0},{y:0,opacity:1,duration:.42,stagger:.08},.58)
+      .fromTo(slide.querySelectorAll('.art-frame,.art-orbit'),{scale:.93,opacity:0},{scale:1,opacity:1,duration:.75,stagger:.1},.2)
+      .fromTo(slide.querySelectorAll('.art-svg,.osc-wrap,.invention-card'),{y:30,scale:.97,opacity:0},{y:0,scale:1,opacity:1,duration:.8,stagger:.11},.28)
+      .fromTo(slide.querySelectorAll('.micro-label,.data-tag'),{opacity:0,y:8},{opacity:1,y:0,duration:.4,stagger:.08},.85);
+    if (i===6) tl.fromTo(slide.querySelectorAll('.credit-line'),{opacity:0,y:22},{opacity:1,y:0,duration:1,stagger:.8},.8).fromTo(slide.querySelector('.replay'),{opacity:0,y:12},{opacity:1,y:0,duration:.5},2.2);
+    animateDrawings(slide);
+    updateAtmosphere(i);
+  }
+
+  function changeSlide(next) {
+    if (transitioning) return;
+    const target = Math.max(0,Math.min(total-1,next));
+    if (target===index) { if(index===total-1 && next>index) stopAutoplay(); return; }
+    transitioning = true;
+    stopAutoplayTimerOnly();
+    const old = slides[index];
+    const forward = target>index;
+    const out = gsap.timeline({onComplete:()=>{
+      old.classList.remove('active');
+      index=target;
+      gsap.set(transitionFlash,{x:forward?'125%':'-125%',opacity:0});
+      const sweep = gsap.timeline({onComplete:()=>{transitioning=false;enterSlide(index);if(autoplay){if(index===total-1)stopAutoplay();else startAutoplayTimer();}}});
+      sweep.to(transitionFlash,{opacity:.9,duration:.08}).to(transitionFlash,{x:forward?'-125%':'125%',duration:.55,ease:'power3.inOut'},0).to(transitionFlash,{opacity:0,duration:.22},.32);
+    }});
+    out.to(old,{scale:.975,filter:'blur(7px)',opacity:0,duration:reducedMotion?.12:.42,ease:'power2.in'});
+  }
+
+  function startAutoplayTimer() {
+    if (!autoplay || index===total-1) return;
+    gsap.killTweensOf(countProgress);
+    gsap.set(countProgress,{strokeDashoffset:CIRC});
+    autoplayTween = gsap.to(countProgress,{strokeDashoffset:0,duration:12,ease:'none',onComplete:()=>{if(autoplay){if(index<total-1)changeSlide(index+1);else stopAutoplay();}}});
+  }
+  function stopAutoplayTimerOnly(){if(autoplayTween){autoplayTween.kill();autoplayTween=null;}gsap.set(countProgress,{strokeDashoffset:CIRC});}
+  function stopAutoplay(){autoplay=false;stopAutoplayTimerOnly();autoplayBtn.setAttribute('aria-pressed','false');autoplayLabel.textContent='AUTO / OFF';}
+  function toggleAutoplay(){autoplay=!autoplay;autoplayBtn.setAttribute('aria-pressed',String(autoplay));autoplayLabel.textContent=autoplay?'AUTO / ON':'AUTO / OFF';if(autoplay){if(index===total-1)changeSlide(0);else startAutoplayTimer();}else stopAutoplayTimerOnly();}
+
+  prevBtn.addEventListener('click',()=>{stopAutoplay();changeSlide(index-1);});
+  nextBtn.addEventListener('click',()=>{stopAutoplay();if(index===total-1)changeSlide(0);else changeSlide(index+1);});
+  autoplayBtn.addEventListener('click',toggleAutoplay);
+  document.getElementById('replay-btn').addEventListener('click',()=>{stopAutoplay();changeSlide(0);});
+  notesToggle.addEventListener('click',()=>{noteVisible=!noteVisible;speakerBox.classList.toggle('hidden-notes',!noteVisible);notesToggle.textContent=noteVisible?'SUBTITLES / ON':'SUBTITLES / OFF';notesToggle.setAttribute('aria-pressed',String(noteVisible));});
+
+  window.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){e.preventDefault();stopAutoplay();if(index<total-1)changeSlide(index+1);}
+    if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();stopAutoplay();if(index>0)changeSlide(index-1);}
+    if(e.key==='Home'){e.preventDefault();stopAutoplay();changeSlide(0);}
+    if(e.key==='End'){e.preventDefault();stopAutoplay();changeSlide(total-1);}
+  });
+  let touchStartX=0,touchStartY=0;
+  document.getElementById('stage').addEventListener('touchstart',e=>{const t=e.changedTouches[0];touchStartX=t.clientX;touchStartY=t.clientY;},{passive:true});
+  document.getElementById('stage').addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-touchStartX,dy=t.clientY-touchStartY;if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy)*1.2){stopAutoplay();changeSlide(index+(dx<0?1:-1));}},{passive:true});
+
+  // Gentle 3D parallax on copy and artwork layers.
+  let pointerX=0,pointerY=0;
+  window.addEventListener('pointermove',e=>{pointerX=(e.clientX/window.innerWidth-.5)*2;pointerY=(e.clientY/window.innerHeight-.5)*2;document.querySelectorAll('.slide.active .parallax').forEach((el,n)=>{gsap.to(el,{rotateY:pointerX*(n===0?2.2:-2.8),rotateX:-pointerY*2,x:pointerX*(n===0?3:-4),y:pointerY*2,duration:.8,ease:'power2.out',overwrite:'auto'});});},{passive:true});
+  window.addEventListener('pointerleave',()=>document.querySelectorAll('.parallax').forEach(el=>gsap.to(el,{rotateX:0,rotateY:0,x:0,y:0,duration:1,ease:'power2.out'})));
+
+  // Procedural electric atmosphere: branching arcs + floating charged particles.
+  const bg=document.getElementById('electric-bg'),ctx=bg.getContext('2d');
+  let W=0,H=0,DPR=1,lastBolt=0,bolts=[],particles=[],scene=0,lastTime=0;
+  function resize(){DPR=Math.min(window.devicePixelRatio||1,2);W=window.innerWidth;H=window.innerHeight;bg.width=Math.floor(W*DPR);bg.height=Math.floor(H*DPR);bg.style.width=W+'px';bg.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);particles=Array.from({length:Math.max(45,Math.min(115,Math.floor(W*H/10500)))},()=>makeParticle(true));}
+  function makeParticle(initial=false){return{x:Math.random()*W,y:initial?Math.random()*H:H+10,vx:(Math.random()-.5)*.22,vy:scene===5?-(.08+Math.random()*.18):-(.12+Math.random()*.38),r:Math.random()*1.5+.35,a:Math.random()*.5+.12,p:Math.random()*Math.PI*2};}
+  function makeBolt(x,y,endY,spread,depth,branch=false){const points=[{x,y}];let cx=x,cy=y;const segments=Math.max(5,Math.floor((endY-y)/25));for(let i=0;i<segments;i++){cy+=(endY-y)/segments;cx+=(Math.random()-.5)*spread;points.push({x:cx,y:cy});}return{points,alpha:branch?.45:1,life:1,width:branch?1:1.7};}
+  function spawnLightning(){const x=Math.random()*W*.9+W*.05;const bolt=makeBolt(x,-8,H*(.32+Math.random()*.42),Math.max(35,W*.09),5);bolts.push(bolt);if(Math.random()>.35){const p=bolt.points[Math.floor(bolt.points.length*.35+Math.random()*bolt.points.length*.35)];bolts.push(makeBolt(p.x,p.y,p.y+H*.15,Math.max(25,W*.045),3,true));}}
+  function drawBolt(b){ctx.beginPath();ctx.moveTo(b.points[0].x,b.points[0].y);for(let i=1;i<b.points.length;i++)ctx.lineTo(b.points[i].x,b.points[i].y);ctx.strokeStyle=`rgba(0,243,255,${b.alpha*b.life})`;ctx.lineWidth=b.width;ctx.shadowBlur=18;ctx.shadowColor='#00f3ff';ctx.stroke();ctx.shadowBlur=0;}
+  function updateAtmosphere(i){scene=i;document.getElementById('app').style.setProperty('--scene-glow',i===5?'rgba(160,190,255,.08)':'rgba(0,243,255,.12)');if(i===5){bolts=[];particles=particles.map(p=>({...p,vy:-(.035+Math.random()*.11),vx:(Math.random()-.5)*.12,r:Math.random()*1.2+.35,a:Math.random()*.55+.12}));}else if(i===6){bolts=[];particles=particles.map(p=>({...p,vy:(Math.random()-.5)*.18,vx:(Math.random()-.5)*.18,r:Math.random()*1.8+.5,a:Math.random()*.55+.2}));}else{particles=particles.map(p=>({...p,vy:-(.12+Math.random()*.38),vx:(Math.random()-.5)*.22}));}}
+  function drawBackground(time){requestAnimationFrame(drawBackground);const dt=Math.min(34,time-lastTime||16);lastTime=time;ctx.clearRect(0,0,W,H);
+    const quiet=scene===5,finale=scene===6;
+    const grad=ctx.createRadialGradient(W*.68,H*.44,0,W*.68,H*.44,Math.max(W,H)*.72);grad.addColorStop(0,quiet?'rgba(31,49,79,.19)':finale?'rgba(30,32,95,.19)':'rgba(0,85,115,.13)');grad.addColorStop(1,'rgba(5,8,20,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+    if(!quiet&&!finale&&time-lastBolt>(scene===0?560:scene===3?950:1500)){spawnLightning();lastBolt=time;}
+    bolts.forEach(b=>{drawBolt(b);b.life-=dt/(b.width>1?310:430);});bolts=bolts.filter(b=>b.life>0);
+    particles.forEach(p=>{p.x+=p.vx*dt*.06+Math.sin(time*.0005+p.p)*.09;p.y+=p.vy*dt*.06;if(p.y<-8||p.x<-10||p.x>W+10){Object.assign(p,makeParticle(false));p.x=Math.random()*W;}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=quiet||finale?`rgba(220,235,255,${p.a})`:`rgba(0,243,255,${p.a})`;ctx.shadowBlur=quiet?5:8;ctx.shadowColor=quiet?'#b7d4ff':'#00f3ff';ctx.fill();ctx.shadowBlur=0;});
+    if(finale){ctx.beginPath();ctx.arc(W*.76,H*.5,Math.min(W,H)*.19,0,Math.PI*2);ctx.strokeStyle='rgba(0,243,255,.08)';ctx.lineWidth=1;ctx.stroke();}
+  }
+  window.addEventListener('resize',resize);resize();requestAnimationFrame(drawBackground);
+
+  // Independent animated oscilloscope traces for the AC/DC comparison slide.
+  const osc=document.getElementById('oscilloscope'),octx=osc.getContext('2d');
+  function drawOsc(time){requestAnimationFrame(drawOsc);const w=osc.width,h=osc.height;octx.clearRect(0,0,w,h);octx.strokeStyle='rgba(109,145,177,.14)';octx.lineWidth=1;for(let x=0;x<=w;x+=75){octx.beginPath();octx.moveTo(x,0);octx.lineTo(x,h);octx.stroke();}for(let y=0;y<=h;y+=52){octx.beginPath();octx.moveTo(0,y);octx.lineTo(w,y);octx.stroke();}
+    const mid=h*.5,amp=h*.29;octx.setLineDash([5,8]);octx.strokeStyle='rgba(175,198,220,.18)';octx.beginPath();octx.moveTo(0,mid);octx.lineTo(w,mid);octx.stroke();octx.setLineDash([]);
+    octx.beginPath();octx.moveTo(0,h*.27);octx.lineTo(w,h*.27);octx.strokeStyle='rgba(255,120,78,.8)';octx.lineWidth=3;octx.shadowBlur=12;octx.shadowColor='#ff784e';octx.stroke();octx.shadowBlur=0;
+    octx.beginPath();for(let x=0;x<=w;x+=2){const y=mid-Math.sin(x*.018-time*.0022)*amp;if(x===0)octx.moveTo(x,y);else octx.lineTo(x,y);}octx.strokeStyle='#00f3ff';octx.lineWidth=3;octx.shadowBlur=14;octx.shadowColor='#00f3ff';octx.stroke();octx.shadowBlur=0;
+    octx.fillStyle='rgba(255,120,78,.9)';octx.font='16px Orbitron';octx.fillText('DC',18,h*.27-13);octx.fillStyle='#00f3ff';octx.fillText('AC',18,mid-amp-12);
+  }
+  requestAnimationFrame(drawOsc);
+
+  enterSlide(0);
+  // Keep autoplay countdown paused when the tab is not visible.
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&autoplay)stopAutoplayTimerOnly();else if(!document.hidden&&autoplay)startAutoplayTimer();});
+})();
+</script>
+</body>
+</html>
